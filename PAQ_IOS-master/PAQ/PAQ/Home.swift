@@ -78,7 +78,7 @@ class Home: UIViewController{
     //segue sends information to ViewController, for editing alarms
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "editSegue"{
-            var alarmController = segue.destination as! ViewController
+            let alarmController = segue.destination as! ViewController
             alarmController.edit = true
             alarmController.index = tableView.indexPathForSelectedRow!.row
             alarmController.currCentral = currCentral
@@ -89,7 +89,7 @@ class Home: UIViewController{
             svc.sendKey = 3
         }
         if segue.identifier == "addSegue"{
-            var alarmController = segue.destination as! ViewController
+            let alarmController = segue.destination as! ViewController
             alarmController.currCentral = currCentral
             alarmController.currPeripheral = currPeripheral
             
@@ -243,7 +243,7 @@ extension Home: UITableViewDataSource, UITableViewDelegate {
                         return
                 }
                 
-                svc.idString = self.extractID(id: String((self.alarms[indexPath.row] as! NSManagedObject).value(forKeyPath: "id") as! Int))
+                svc.idString = self.extractID(id: String((self.alarms[indexPath.row]).value(forKeyPath: "id") as! Int))
                 svc.sendKey = 4
                 // sends new alarm data since alarm is deleted
                 self.currCentral?.connect(self.currPeripheral, options: nil)

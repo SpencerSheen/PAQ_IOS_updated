@@ -70,7 +70,7 @@ class BLE_signals: UIViewController{
         //pass old alarm data objects
         if segue.identifier == "connectSegue"{
             let svc = tabBarController as! TabBarController
-            var alarmController = segue.destination as! Bluetooth_connection
+            let alarmController = segue.destination as! Bluetooth_connection
             alarmController.oldCentral = svc.currCentral
             alarmController.device = svc.currPeripheral
         }
