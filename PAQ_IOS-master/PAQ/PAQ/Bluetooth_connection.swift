@@ -26,7 +26,7 @@ class Bluetooth_connection: UIViewController,UITableViewDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         centralManager = CBCentralManager(delegate: self, queue: nil)
-        print(centralManager)
+        print(centralManager ?? "centralManager is NIL")
         // Do any additional setup after loading the view.
     }
     
@@ -77,17 +77,17 @@ class Bluetooth_connection: UIViewController,UITableViewDelegate {
     //takes every alarm from coredata and converts it to a string
     func getAlarm(alarms: NSManagedObject) -> String{
         var totalAlarmString = "A"
-        let ID = extractID(id: String((alarms as! NSManagedObject).value(forKeyPath: "id") as! Int))
-        let time = extractTime(time: String((alarms as! NSManagedObject).value(forKeyPath: "time") as! String!))
-        let days = extractDays(days: (alarms as! NSManagedObject).value(forKeyPath: "days") as? Array<Bool> ?? [])
+        let ID = extractID(id: String(alarms.value(forKeyPath: "id") as! Int))
+        let time = extractTime(time: String(alarms.value(forKeyPath: "time") as! String))
+        let days = extractDays(days: alarms.value(forKeyPath: "days") as? Array<Bool> ?? [])
         
-        let misc = String((alarms as! NSManagedObject).value(forKeyPath: "duration") as! Int!) +
-            String((alarms as! NSManagedObject).value(forKeyPath: "snoozes") as! Int!) +
-            String((alarms as! NSManagedObject).value(forKeyPath: "intensity") as! Int!) +
-            String((alarms as! NSManagedObject).value(forKeyPath: "length") as! Int!)
+        let misc = String(alarms.value(forKeyPath: "duration") as! Int) +
+            String(alarms.value(forKeyPath: "snoozes") as! Int) +
+            String(alarms.value(forKeyPath: "intensity") as! Int) +
+            String(alarms.value(forKeyPath: "length") as! Int)
         
         
-        let active = extractActive(active: (alarms as! NSManagedObject).value(forKeyPath: "active") as! Bool!)
+        let active = extractActive(active: alarms.value(forKeyPath: "active") as! Bool)
         //order of alarm string
         totalAlarmString += ID + time + days + misc + active
         return totalAlarmString
@@ -155,7 +155,6 @@ class Bluetooth_connection: UIViewController,UITableViewDelegate {
 }
 
 extension Bluetooth_connection: UITableViewDataSource {
-    
     //number of available peripherals
     public func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int{
         return peripherals.count
@@ -171,7 +170,7 @@ extension Bluetooth_connection: UITableViewDataSource {
     
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let device = peripherals[indexPath.row]
+        //let device = peripherals[indexPath.row]
         //centralManager?.connect(device, options: nil)
         //stopBLEScan()
     }
@@ -238,7 +237,7 @@ extension Bluetooth_connection: CBPeripheralDelegate{
     
     func peripheral(_ peripheral: CBPeripheral, didWriteValueForCharacteristic descriptor: CBDescriptor, error: Error?) {
         print("Error: ")
-        print(error)
+        print(error ?? "unknown error")
     }
     
     func peripheral(_ peripheral: CBPeripheral, didDiscoverCharacteristicsFor service: CBService, error: Error?) {
@@ -247,8 +246,6 @@ extension Bluetooth_connection: CBPeripheralDelegate{
         }
         //may need to add loop back to go through characteristics
         //for characteristic in characteristics {
-        
-        let helloWorld = "Hello world\n"
         
         //Get all existing alarms
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else {

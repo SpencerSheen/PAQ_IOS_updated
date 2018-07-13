@@ -156,7 +156,7 @@ class ViewController: UIViewController {
             
             let time = get_time()
             let repeat_days = [monday_clicked,tuesday_clicked, wednesday_clicked,thursday_clicked,friday_clicked,saturday_clicked,sunday_clicked]
-            let alarm_o = ["time": time, "repeat": repeat_days, "duration":Int(duration_slider.value), "snoozes":Int(snoozes_num.value), "intensity":Int(intensity_slider.value), "length":Int(length_slider.value)] as [String : Any]
+            //let alarm_o = ["time": time, "repeat": repeat_days, "duration":Int(duration_slider.value), "snoozes":Int(snoozes_num.value), "intensity":Int(intensity_slider.value), "length":Int(length_slider.value)] as [String : Any]
             
             //accessing core data
             guard let appDelegate =
@@ -259,7 +259,7 @@ class ViewController: UIViewController {
             let editedAlarm = try context.fetch(request)
             //loops through all alarm id values
             for alarms in editedAlarm{
-                if(Int((alarms as AnyObject).value(forKeyPath: "id") as! Int!) == randomNum){
+                if(Int((alarms as AnyObject).value(forKeyPath: "id") as! Int) == randomNum){
                     return false
                 }
             }
@@ -303,15 +303,15 @@ class ViewController: UIViewController {
                 //retrieves alarm data depending on index value
                 var editedAlarm = try context.fetch(request)
                 let oldAlarm = editedAlarm[index] as! NSManagedObject
-                length_slider.value = Float(oldAlarm.value(forKeyPath: "length") as! Int!)
-                intensity_slider.value = Float(oldAlarm.value(forKeyPath: "intensity") as! Int!)
-                duration_slider.value = Float(oldAlarm.value(forKeyPath: "duration") as! Int!)
-                snoozes_num.value = Float(oldAlarm.value(forKeyPath: "snoozes") as! Int!)
+                length_slider.value = Float(oldAlarm.value(forKeyPath: "length") as! Int)
+                intensity_slider.value = Float(oldAlarm.value(forKeyPath: "intensity") as! Int)
+                duration_slider.value = Float(oldAlarm.value(forKeyPath: "duration") as! Int)
+                snoozes_num.value = Float(oldAlarm.value(forKeyPath: "snoozes") as! Int)
                 
                 
                 let dateFormatter = DateFormatter()
                 dateFormatter.timeStyle = .short
-                let oldDate = dateFormatter.date(from: oldAlarm.value(forKeyPath:"time") as! String!)
+                let oldDate = dateFormatter.date(from: oldAlarm.value(forKeyPath:"time") as! String)
                 time_picker.date = oldDate!
                 
                 let days: [Bool] = oldAlarm.value(forKeyPath: "days") as? Array<Bool> ?? []
@@ -399,7 +399,7 @@ class ViewController: UIViewController {
         //adjusting date picker to phone time
         time_picker.timeZone = TimeZone.current
         
-        let saved = UserDefaults.standard.dictionary(forKey: "saved alarm")
+        //let saved = UserDefaults.standard.dictionary(forKey: "saved alarm")
         
         // Do any additional setup after loading the view, typically from a nib.
     }

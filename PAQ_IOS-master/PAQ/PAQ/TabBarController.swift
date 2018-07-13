@@ -88,11 +88,9 @@ class TabBarController: UITabBarController{
             do{
                 let peripherals = try context.fetch(request)
                 for peripheral in peripherals{
-                    if peripheral != nil{
-                        let ID = (peripheral as! NSManagedObject).value(forKey: "peripheralID") as! UUID
-                        print(ID)
-                        CBUUIDList.append(ID as NSUUID)
-                    }
+                    let ID = (peripheral as! NSManagedObject).value(forKey: "peripheralID") as! UUID
+                    print(ID)
+                    CBUUIDList.append(ID as NSUUID)
                 }
             } catch {
                 print("Could not fetch")
@@ -103,7 +101,7 @@ class TabBarController: UITabBarController{
             let connectedPeripherals = currCentral?.retrievePeripherals(withIdentifiers: CBUUIDList as [UUID])
             //central does not actually connect to peripheral until later
             if(connectedPeripherals?.count != 0){
-                print(connectedPeripherals?.count)
+                print(connectedPeripherals?.count ?? "nil")
                 currPeripheral = connectedPeripherals![0]
                 print(currPeripheral)
             }
@@ -114,17 +112,17 @@ class TabBarController: UITabBarController{
     //takes every alarm from coredata and converts it to a string
     func getAlarm(alarms: NSManagedObject) -> String{
         var totalAlarmString = "A"
-        let ID = extractID(id: String((alarms as! NSManagedObject).value(forKeyPath: "id") as! Int))
-        let time = extractTime(time: String((alarms as! NSManagedObject).value(forKeyPath: "time") as! String!))
-        let days = extractDays(days: (alarms as! NSManagedObject).value(forKeyPath: "days") as? Array<Bool> ?? [])
+        let ID = extractID(id: String((alarms).value(forKeyPath: "id") as! Int))
+        let time = extractTime(time: String((alarms).value(forKeyPath: "time") as! String))
+        let days = extractDays(days: (alarms).value(forKeyPath: "days") as? Array<Bool> ?? [])
         
-        let misc = String((alarms as! NSManagedObject).value(forKeyPath: "duration") as! Int!) +
-            String((alarms as! NSManagedObject).value(forKeyPath: "snoozes") as! Int!) +
-            String((alarms as! NSManagedObject).value(forKeyPath: "intensity") as! Int!) +
-            String((alarms as! NSManagedObject).value(forKeyPath: "length") as! Int!)
+        let misc = String((alarms).value(forKeyPath: "duration") as! Int) +
+            String((alarms).value(forKeyPath: "snoozes") as! Int) +
+            String((alarms).value(forKeyPath: "intensity") as! Int) +
+            String((alarms).value(forKeyPath: "length") as! Int)
         
         
-        let active = extractActive(active: (alarms as! NSManagedObject).value(forKeyPath: "active") as! Bool!)
+        let active = extractActive(active: alarms.value(forKeyPath: "active") as! Bool)
         //order of alarm string
         totalAlarmString += ID + time + days + misc + active
         return totalAlarmString
@@ -255,7 +253,7 @@ extension TabBarController: CBPeripheralDelegate{
     
     func peripheral(_ peripheral: CBPeripheral, didWriteValueForCharacteristic descriptor: CBDescriptor, error: Error?) {
         print("Error: ")
-        print(error)
+        print(error ?? "unknown error")
     }
     
     func peripheral(_ peripheral: CBPeripheral, didDiscoverCharacteristicsFor service: CBService, error: Error?) {
@@ -264,8 +262,6 @@ extension TabBarController: CBPeripheralDelegate{
         }
         //may need to add loop back to go through characteristics
         //for characteristic in characteristics {
-        
-        let helloWorld = "Hello world\n"
         
         //Get all existing alarms
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else {

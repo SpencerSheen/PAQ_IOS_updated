@@ -55,7 +55,7 @@ class TableViewCell: UITableViewCell {
     }
     
     func setAlarmLabel(alarm: NSManagedObject){
-        time_lbl.text = alarm.value(forKeyPath: "time") as? String!
+        time_lbl.text = alarm.value(forKeyPath: "time") as? String
     }
     
     func setIndex(index: Int){
@@ -95,7 +95,7 @@ class TableViewCell: UITableViewCell {
     }
     
     func setToggle(alarm: NSManagedObject){
-        let toggle = alarm.value(forKeyPath: "active") as? Bool!
+        let toggle = alarm.value(forKeyPath: "active") as? Bool
         active_toggle.setOn(toggle!, animated: true)
     }
     
