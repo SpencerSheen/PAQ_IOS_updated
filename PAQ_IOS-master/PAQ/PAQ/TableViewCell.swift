@@ -19,9 +19,14 @@ class TableViewCell: UITableViewCell {
     
     var currCentral: CBCentralManager?
     var currPeripheral: CBPeripheral!
+    var svc: TabBarController!
     
     var index = 0
     @IBAction func changeToggle(_ sender: UISwitch) {
+        
+        //let svc = self.tabBarController as! TabBarController
+        svc.sendKey = 3
+        svc.alarmIndex = index
         
         guard let appDelegate =
             UIApplication.shared.delegate as? AppDelegate else {
@@ -41,6 +46,7 @@ class TableViewCell: UITableViewCell {
                 newAlarm.setValue(false, forKeyPath: "active")
             }
             print(self.currPeripheral)
+            
             //sends new data through bluetooth
             self.currCentral?.connect(self.currPeripheral, options: nil)
             do {
@@ -62,9 +68,10 @@ class TableViewCell: UITableViewCell {
         self.index = index
     }
     
-    func setBLE(central: CBCentralManager, peripheral: CBPeripheral){
+    func setBLE(central: CBCentralManager, peripheral: CBPeripheral, svc: TabBarController){
         self.currCentral = central
         self.currPeripheral = peripheral
+        self.svc = svc
     }
     
     func setDayLabel(alarm: NSManagedObject){

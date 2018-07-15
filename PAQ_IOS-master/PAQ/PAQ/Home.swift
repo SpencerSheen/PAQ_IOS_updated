@@ -183,7 +183,8 @@ extension Home: UITableViewDataSource, UITableViewDelegate {
         cell.setToggle(alarm: alarm)
         
         if(self.currPeripheral != nil){
-            cell.setBLE(central: self.currCentral!, peripheral: self.currPeripheral)
+            let svc = tabBarController as! TabBarController
+            cell.setBLE(central: self.currCentral!, peripheral: self.currPeripheral, svc: svc)
         }
         
         //index used to send data to TableViewCell for the alarm toggle

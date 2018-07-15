@@ -111,7 +111,7 @@ class TabBarController: UITabBarController{
     
     //takes every alarm from coredata and converts it to a string
     func getAlarm(alarms: NSManagedObject) -> String{
-        var totalAlarmString = "A"
+        var totalAlarmString = ""
         let ID = extractID(id: String((alarms).value(forKeyPath: "id") as! Int))
         let time = extractTime(time: String((alarms).value(forKeyPath: "time") as! String))
         let days = extractDays(days: (alarms).value(forKeyPath: "days") as? Array<Bool> ?? [])
@@ -287,11 +287,15 @@ extension TabBarController: CBPeripheralDelegate{
             }
             
             if(sendKey == 3){
-                if alarmIndex == -1 {
-                    alarmIndex = allAlarms.count-1
+                var tempAlarmIndex = alarmIndex
+                totalAlarmString = "E"
+                //adding alarm
+                if tempAlarmIndex == -1 {
+                    tempAlarmIndex = allAlarms.count-1
+                    totalAlarmString = "A"
                 }
                 
-                totalAlarmString = getAlarm(alarms: allAlarms[alarmIndex] as! NSManagedObject)
+                totalAlarmString += getAlarm(alarms: allAlarms[tempAlarmIndex] as! NSManagedObject)
                 let dataToSend = totalAlarmString.data(using: String.Encoding.utf8)
                 //send data to arduino
                 peripheral.writeValue(dataToSend!, for: characteristics[0], type: CBCharacteristicWriteType.withResponse)
@@ -309,7 +313,6 @@ extension TabBarController: CBPeripheralDelegate{
                 peripheral.writeValue(dataToSend!, for: characteristics[0], type: CBCharacteristicWriteType.withResponse)
                 //timerSend = false
             }
-            
             
         } catch {
             print("Could not fetch")
