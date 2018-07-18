@@ -16,16 +16,15 @@ class TabBarController: UITabBarController{
     var CBUUIDList: [NSUUID] = []
     var peripherals:[CBPeripheral] = []
     
-    var sendKey = 5
     //Key: 0 for sending nothing
     //Key: 1 for timer
-    var timerString = ""
     //Key: 2 for adding all alarms
     //Key: 3 for editing alarm
-    var alarmIndex = 8
     //Key: 4 for deleting alarm
+    var sendKey = 0
+    var timerString = ""
+    var alarmIndex = 8
     var idString = ""
-    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -274,7 +273,31 @@ extension TabBarController: CBPeripheralDelegate{
             print(sendKey)
             let allAlarms = try context.fetch(request)
             
-            if(sendKey == 2){
+            if(sendKey == 0){   //sending out system time to RTC over BLE
+                let date = Date()
+                let calendar = Calendar.current
+                
+                let currSec     = calendar.component(.second, from: date)
+                let currMin     = calendar.component(.minute, from: date)
+                let currHr      = calendar.component(.hour, from: date)
+                let dayOfWeek   = calendar.component(.weekday, from: date)
+                let dayOfMonth  = calendar.component(.day, from: date)
+                let month       = calendar.component(.month, from: date)
+                let year        = calendar.component(.year, from: date)
+                
+                let secString   = (currSec  < 10 ? "0" : "") + String(currSec)
+                let minString   = (currMin  < 10 ? "0" : "") + String(currMin)
+                let hourString  = (currHr   < 10 ? "0" : "") + String(currHr)
+                let DOMString   = (dayOfMonth < 10 ? "0" : "") + String(dayOfMonth)
+                let monString   = (month    < 10 ? "0" : "") + String(month)
+                
+                let dataToSend = (secString + minString + hourString + String(dayOfWeek) + DOMString + monString + String(year)).data(using: .utf8)!
+                peripheral.writeValue(dataToSend, for: characteristic, type: CBCharacteristicWriteType.withResponse)
+            }else if(sendKey == 1){
+                let dataToSend = timerString.data(using: String.Encoding.utf8)
+                peripheral.writeValue(dataToSend!, for: characteristic, type: CBCharacteristicWriteType.withResponse)
+                //timerSend = false
+            }else if(sendKey == 2){
                 //loop through alarms
                 for alarms in allAlarms{
                     //convert alarm info into a string
@@ -284,9 +307,7 @@ extension TabBarController: CBPeripheralDelegate{
                     //send data to arduino
                     peripheral.writeValue(dataToSend!, for: characteristic, type: CBCharacteristicWriteType.withResponse)
                 }
-            }
-            
-            if(sendKey == 3){
+            }else if(sendKey == 3){
                 var tempAlarmIndex = alarmIndex
                 totalAlarmString = "E"
                 //adding alarm
@@ -299,19 +320,11 @@ extension TabBarController: CBPeripheralDelegate{
                 let dataToSend = totalAlarmString.data(using: String.Encoding.utf8)
                 //send data to arduino
                 peripheral.writeValue(dataToSend!, for: characteristic, type: CBCharacteristicWriteType.withResponse)
-            }
-            
-            if(sendKey == 4){
+            }else if(sendKey == 4){
                 totalAlarmString += "D" + idString
                 let dataToSend = totalAlarmString.data(using: String.Encoding.utf8)
                 //send data to arduino
                 peripheral.writeValue(dataToSend!, for: characteristic, type: CBCharacteristicWriteType.withResponse)
-            }
-            
-            if(sendKey == 1){
-                let dataToSend = timerString.data(using: String.Encoding.utf8)
-                peripheral.writeValue(dataToSend!, for: characteristic, type: CBCharacteristicWriteType.withResponse)
-                //timerSend = false
             }
             
         } catch {
