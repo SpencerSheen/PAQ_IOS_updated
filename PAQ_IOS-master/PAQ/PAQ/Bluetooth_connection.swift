@@ -245,7 +245,7 @@ extension Bluetooth_connection: CBPeripheralDelegate{
             return
         }
         //may need to add loop back to go through characteristics
-        //for characteristic in characteristics {
+        for characteristic in characteristics {
         
         //Get all existing alarms
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else {
@@ -264,12 +264,12 @@ extension Bluetooth_connection: CBPeripheralDelegate{
                 //convert alarm string to data type that is sendable
                 let dataToSend = totalAlarmString.data(using: String.Encoding.utf8)
                 //send data to arduino
-                peripheral.writeValue(dataToSend!, for: characteristics[0], type: CBCharacteristicWriteType.withResponse)
+                peripheral.writeValue(dataToSend!, for: characteristic, type: CBCharacteristicWriteType.withResponse)
             }
         } catch {
             print("Could not fetch")
         }
-        //}
+        }
     }
 }
 
