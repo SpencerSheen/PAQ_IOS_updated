@@ -21,10 +21,11 @@ class TabBarController: UITabBarController{
     //Key: 2 for adding all alarms
     //Key: 3 for editing alarm
     //Key: 4 for deleting alarm
-    var sendKey = 0
+    var sendKey = 6
     var timerString = ""
     var alarmIndex = 8
     var idString = ""
+    var alreadySent = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -46,7 +47,7 @@ class TabBarController: UITabBarController{
         //if central and peripheral values already exist, save them into coredata
         if(currCentral != nil && currPeripheral != nil){
             //currCentral = CBCentralManager(delegate: self, queue: nil)
-            
+            sendKey = 2
             guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else {
                 return
             }
@@ -73,10 +74,13 @@ class TabBarController: UITabBarController{
                 print("Could not save")
             }
             //currCentral?.connect(currPeripheral, options: nil)
+            currCentral = nil
+            currPeripheral = nil
         }
         
         //if central and peripheral data do not exist, initialize a new central and get peripheral ID from coredata
         if(currCentral == nil && currPeripheral == nil){
+            sendKey = 5
             currCentral = CBCentralManager(delegate: self, queue: nil)
             
             guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else {
@@ -102,6 +106,9 @@ class TabBarController: UITabBarController{
             if(connectedPeripherals?.count != 0){
                 print(connectedPeripherals?.count ?? "nil")
                 currPeripheral = connectedPeripherals![0]
+                if currPeripheral.state == .connected {
+                    alreadySent = true
+                }
                 print(currPeripheral)
             }
         }
@@ -224,7 +231,9 @@ extension TabBarController: CBCentralManagerDelegate{
         case .poweredOn:
             print("central.state is poweredOn")
             if(currPeripheral != nil){
+                //sendKey = 5
                 currCentral?.connect(currPeripheral, options: nil)
+                //sendKey = 0
             }
         }
     }
@@ -273,7 +282,7 @@ extension TabBarController: CBPeripheralDelegate{
             print(sendKey)
             let allAlarms = try context.fetch(request)
             
-            if(sendKey == 0){   //sending out system time to RTC over BLE
+            if(sendKey == 5 && !alreadySent){   //sending out system time to RTC over BLE
                 let date = Date()
                 let calendar = Calendar.current
                 
@@ -285,13 +294,14 @@ extension TabBarController: CBPeripheralDelegate{
                 let month       = calendar.component(.month, from: date)
                 let year        = calendar.component(.year, from: date)
                 
+                let keyString = "C"
                 let secString   = (currSec  < 10 ? "0" : "") + String(currSec)
                 let minString   = (currMin  < 10 ? "0" : "") + String(currMin)
                 let hourString  = (currHr   < 10 ? "0" : "") + String(currHr)
                 let DOMString   = (dayOfMonth < 10 ? "0" : "") + String(dayOfMonth)
                 let monString   = (month    < 10 ? "0" : "") + String(month)
                 
-                let dataToSend = (secString + minString + hourString + String(dayOfWeek) + DOMString + monString + String(year)).data(using: .utf8)!
+                let dataToSend = (keyString + secString + minString + hourString + String(dayOfWeek) + DOMString + monString + String(year)).data(using: .utf8)!
                 peripheral.writeValue(dataToSend, for: characteristic, type: CBCharacteristicWriteType.withResponse)
             }else if(sendKey == 1){
                 let dataToSend = timerString.data(using: String.Encoding.utf8)

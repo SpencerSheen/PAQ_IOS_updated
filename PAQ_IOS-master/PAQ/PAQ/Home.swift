@@ -77,6 +77,7 @@ class Home: UIViewController{
     
     //segue sends information to ViewController, for editing alarms
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        let svc = tabBarController as! TabBarController
         if segue.identifier == "editSegue"{
             let alarmController = segue.destination as! ViewController
             alarmController.edit = true
@@ -84,19 +85,24 @@ class Home: UIViewController{
             alarmController.currCentral = currCentral
             alarmController.currPeripheral = currPeripheral
             
-            let svc = tabBarController as! TabBarController
+            //let svc = tabBarController as! TabBarController
             svc.alarmIndex = tableView.indexPathForSelectedRow!.row
             svc.sendKey = 3
+            svc.currPeripheral = currPeripheral
+            svc.currCentral = currCentral
         }
         if segue.identifier == "addSegue"{
             let alarmController = segue.destination as! ViewController
             alarmController.currCentral = currCentral
             alarmController.currPeripheral = currPeripheral
             
-            let svc = tabBarController as! TabBarController
+            //let svc = tabBarController as! TabBarController
             svc.alarmIndex = -1
             svc.sendKey = 3
+            svc.currPeripheral = currPeripheral
+            svc.currCentral = currCentral
         }
+        //svc.sendKey = 0
     }
     
     //Stops user from being able to edit or add alarms if ble is not connected

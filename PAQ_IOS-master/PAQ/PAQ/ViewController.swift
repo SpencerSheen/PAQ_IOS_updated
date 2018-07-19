@@ -148,11 +148,10 @@ class ViewController: UIViewController {
         
         if segue.identifier == "saveSegue"{
             //send BLE data to tab bar
-            /*let homeController = segue.destination as! TabBarController
-            homeController.currCentral = currCentral
-            homeController.currPeripheral = currPeripheral
-            homeController.sendKey = 2
-            homeController.alarmIndex = index*/
+            let homeController = segue.destination as! TabBarController
+            homeController.alreadySent = true
+            //homeController.sendKey = 2
+            //homeController.alarmIndex = index
             
             let time = get_time()
             let repeat_days = [monday_clicked,tuesday_clicked, wednesday_clicked,thursday_clicked,friday_clicked,saturday_clicked,sunday_clicked]

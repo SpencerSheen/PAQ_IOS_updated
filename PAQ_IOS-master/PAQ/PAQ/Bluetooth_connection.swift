@@ -44,7 +44,10 @@ class Bluetooth_connection: UIViewController,UITableViewDelegate {
         if segue.identifier == "returnSegue"{
             stopBLEScan()
             //NEW DISCONNECT FEATURE NEEDS TO BE TESTED
-            //centralManager?.cancelPeripheralConnection(device)
+            if oldCentral != nil{
+                oldCentral?.cancelPeripheralConnection(device)
+                centralManager?.cancelPeripheralConnection(device)
+            }
             let tabBar = segue.destination as! TabBarController
             device = peripherals[table_view.indexPathForSelectedRow!.row]
             tabBar.sendKey = 2
