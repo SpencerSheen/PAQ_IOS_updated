@@ -121,17 +121,24 @@ class TabBarController: UITabBarController{
         let ID = extractID(id: String((alarms).value(forKeyPath: "id") as! Int))
         let time = extractTime(time: String((alarms).value(forKeyPath: "time") as! String))
         let days = extractDays(days: (alarms).value(forKeyPath: "days") as? Array<Bool> ?? [])
+        let duration = extractDuration(value: String((alarms).value(forKeyPath: "duration") as! Int))
         
-        let misc = String((alarms).value(forKeyPath: "duration") as! Int) +
-            String((alarms).value(forKeyPath: "snoozes") as! Int) +
-            String((alarms).value(forKeyPath: "intensity") as! Int) +
-            String((alarms).value(forKeyPath: "length") as! Int)
-        
+        let misc = String((alarms).value(forKeyPath: "snoozes") as! Int) +
+            duration + String((alarms).value(forKeyPath: "interactivity") as! Int)
         
         let active = extractActive(active: alarms.value(forKeyPath: "active") as! Bool)
         //order of alarm string
         totalAlarmString += ID + time + days + misc + active
         return totalAlarmString
+    }
+    
+    func extractDuration(value: String) -> String{
+        if(value.count == 1){
+            return "0" + value
+        }
+        else{
+            return value
+        }
     }
     
     func extractID(id: String) -> String {
@@ -294,7 +301,7 @@ extension TabBarController: CBPeripheralDelegate{
                 let month       = calendar.component(.month, from: date)
                 let year        = calendar.component(.year, from: date)
                 
-                let keyString = "C"
+                let keyString = "S"
                 let secString   = (currSec  < 10 ? "0" : "") + String(currSec)
                 let minString   = (currMin  < 10 ? "0" : "") + String(currMin)
                 let hourString  = (currHr   < 10 ? "0" : "") + String(currHr)

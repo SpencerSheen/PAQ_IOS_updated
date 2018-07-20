@@ -10,6 +10,8 @@
 		13256581203537AC001617A6 /* PAQTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13256580203537AC001617A6 /* PAQTests.swift */; };
 		3D30493A8E4DF8609E71019D /* Pods_PAQ.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 577A5B211B16F0F206ADF549 /* Pods_PAQ.framework */; settings = {ATTRIBUTES = (Required, ); }; };
 		65B926A37096F7BAB8566922 /* Pods_PAQTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C41DCA3986B3DC4E1707FE76 /* Pods_PAQTests.framework */; };
+		882B7B772101482E0096FA05 /* instagram.png in Resources */ = {isa = PBXBuildFile; fileRef = 882B7B752101482D0096FA05 /* instagram.png */; };
+		882B7B782101482E0096FA05 /* facebook.png in Resources */ = {isa = PBXBuildFile; fileRef = 882B7B762101482E0096FA05 /* facebook.png */; };
 		886D163D2030F6DD00BAEB17 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 886D163C2030F6DD00BAEB17 /* CoreData.framework */; };
 		886D16402030F7FD00BAEB17 /* PAQ.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 886D163E2030F7FD00BAEB17 /* PAQ.xcdatamodeld */; };
 		887604CA20B76E9600F604B0 /* ht_snooze.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 887604C120B76E9200F604B0 /* ht_snooze.jpg */; };
@@ -62,6 +64,8 @@
 		22321E5E669A3090BFF3181D /* Pods-PAQ.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PAQ.debug.xcconfig"; path = "Pods/Target Support Files/Pods-PAQ/Pods-PAQ.debug.xcconfig"; sourceTree = "<group>"; };
 		577A5B211B16F0F206ADF549 /* Pods_PAQ.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_PAQ.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		64F22DF6EEE3D4DE640F3804 /* Pods-PAQ.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PAQ.release.xcconfig"; path = "Pods/Target Support Files/Pods-PAQ/Pods-PAQ.release.xcconfig"; sourceTree = "<group>"; };
+		882B7B752101482D0096FA05 /* instagram.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = instagram.png; sourceTree = "<group>"; };
+		882B7B762101482E0096FA05 /* facebook.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = facebook.png; sourceTree = "<group>"; };
 		886D163C2030F6DD00BAEB17 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		886D163F2030F7FD00BAEB17 /* PAQ.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = PAQ.xcdatamodel; sourceTree = "<group>"; };
 		887604C120B76E9200F604B0 /* ht_snooze.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = ht_snooze.jpg; sourceTree = "<group>"; };
@@ -171,6 +175,8 @@
 		9E3782D8202ABC4200A07B86 /* PAQ */ = {
 			isa = PBXGroup;
 			children = (
+				882B7B762101482E0096FA05 /* facebook.png */,
+				882B7B752101482D0096FA05 /* instagram.png */,
 				9ED75997204385BC0073D09A /* PAQ.entitlements */,
 				9E3782D9202ABC4200A07B86 /* AppDelegate.swift */,
 				9E3782DB202ABC4200A07B86 /* ViewController.swift */,
@@ -329,11 +335,13 @@
 				887604D120B76E9600F604B0 /* ht_add_alarm.jpg in Resources */,
 				887604CB20B76E9600F604B0 /* alarm.png in Resources */,
 				887604D220B76E9600F604B0 /* ht_connect.png in Resources */,
+				882B7B772101482E0096FA05 /* instagram.png in Resources */,
 				9E6AE82A20690EC700D862E5 /* alarm yellow.png in Resources */,
 				9E6AE81C2068FB1700D862E5 /* logo.png in Resources */,
 				9E07B29C20780CFF00F98370 /* logo final-10 (1).png in Resources */,
 				9E3782E1202ABC4200A07B86 /* Assets.xcassets in Resources */,
 				887604CF20B76E9600F604B0 /* ht_more_tab.jpg in Resources */,
+				882B7B782101482E0096FA05 /* facebook.png in Resources */,
 				9E6AE82C2069121F00D862E5 /* timer yellow.png in Resources */,
 				9E3782DF202ABC4200A07B86 /* Main.storyboard in Resources */,
 			);

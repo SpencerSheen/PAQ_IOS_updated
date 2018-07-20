@@ -40,14 +40,14 @@ class TimerViewController: UIViewController {
         if state == false {
             time = time_picker.countDownDuration
             time_picker.isHidden = true
-            length_slider.isHidden = true
-            length_lbl.isHidden = true
+            //length_slider.isHidden = true
+            //length_lbl.isHidden = true
             intensity_lbl.isHidden = true
             intensity_slider.isHidden = true
             progress_ring.isHidden = false
             interact_lbl.isHidden = true
-            inten_lbl.isHidden = true
-            len_lbl.isHidden = true
+            //inten_lbl.isHidden = true
+            //len_lbl.isHidden = true
             time_lbl.isHidden = false
             start_b.setTitle("Cancel", for: .normal)
         
@@ -67,7 +67,8 @@ class TimerViewController: UIViewController {
 
             let svc = tabBarController as! TabBarController
             svc.sendKey = 1
-            svc.timerString = getTimeString(timeHour: hours, timeMin: minutes, timeSec: seconds)
+            svc.timerString = getTimeString(timeHour: hours, timeMin: minutes, timeSec: seconds) +
+                String(Int(intensity_slider.value))
             currCentral?.connect(currPeripheral, options: nil)
             //svc.sendKey = 0
             //svc.timerSend = false
@@ -77,17 +78,22 @@ class TimerViewController: UIViewController {
             timer.invalidate()
             time = time_picker.countDownDuration
             time_picker.isHidden = false
-            length_slider.isHidden = false
-            length_lbl.isHidden = false
+            //length_slider.isHidden = false
+            //length_lbl.isHidden = false
             intensity_lbl.isHidden = false
             intensity_slider.isHidden = false
             progress_ring.isHidden = true
             interact_lbl.isHidden = false
-            inten_lbl.isHidden = false
-            len_lbl.isHidden = false
+            //inten_lbl.isHidden = false
+            //len_lbl.isHidden = false
             time_lbl.isHidden = true
             start_b.setTitle("Start", for: .normal)
             state = false
+            
+            let svc = tabBarController as! TabBarController
+            svc.sendKey = 1
+            svc.timerString = "C"
+            currCentral?.connect(currPeripheral, options: nil)
         }
         
         
@@ -113,12 +119,17 @@ class TimerViewController: UIViewController {
 
     
     @IBAction func intensity_action(_ sender: Any) {
-        intensity_lbl.text = String(Int(intensity_slider.value))
+        if Int(intensity_slider.value) == 0 {
+            intensity_lbl.text = "Easy"
+        }
+        else if Int(intensity_slider.value) == 1 {
+            intensity_lbl.text = "Medium"
+        }
+        else if Int(intensity_slider.value) == 2 {
+            intensity_lbl.text = "Hard"
+        }
     }
     
-    @IBAction func length_action(_ sender: Any) {
-        length_lbl.text = String(Int(length_slider.value))
-    }
     override func viewDidLoad() {
         super.viewDidLoad()
         time_picker.setValue(UIColor.white, forKey: "textColor")
@@ -135,8 +146,8 @@ class TimerViewController: UIViewController {
     
     
     override func viewDidAppear(_ animated: Bool) {
-        intensity_lbl.text = String(Int(intensity_slider.value))
-        length_lbl.text = String(Int(length_slider.value))
+        intensity_lbl.text = "Easy"
+        //length_lbl.text = String(Int(length_slider.value))
     }
 
     override func didReceiveMemoryWarning() {

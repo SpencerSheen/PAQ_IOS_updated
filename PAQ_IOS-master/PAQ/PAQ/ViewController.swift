@@ -175,8 +175,7 @@ class ViewController: UIViewController {
                     newAlarm.setValue(time, forKeyPath: "time")
                     newAlarm.setValue(repeat_days, forKeyPath: "days")
                     newAlarm.setValue(Int(snoozes_num.value), forKeyPath: "snoozes")
-                    newAlarm.setValue(Int(intensity_slider.value), forKeyPath: "intensity")
-                    newAlarm.setValue(Int(length_slider.value), forKeyPath: "length")
+                    newAlarm.setValue(Int(intensity_slider.value), forKeyPath: "interactivity")
                     newAlarm.setValue(Int(duration_slider.value), forKeyPath: "duration")
                     do {
                         //send new data through bluetooth
@@ -197,8 +196,7 @@ class ViewController: UIViewController {
                 alarm.setValue(time, forKeyPath: "time")
                 alarm.setValue(repeat_days, forKeyPath: "days")
                 alarm.setValue(Int(snoozes_num.value), forKeyPath: "snoozes")
-                alarm.setValue(Int(intensity_slider.value), forKeyPath: "intensity")
-                alarm.setValue(Int(length_slider.value), forKeyPath: "length")
+                alarm.setValue(Int(intensity_slider.value), forKeyPath: "interactivity")
                 alarm.setValue(Int(duration_slider.value), forKeyPath: "duration")
                 
                 alarm.setValue(true, forKeyPath: "active")
@@ -223,12 +221,16 @@ class ViewController: UIViewController {
         }
     }
     
-    @IBAction func length_slider_change(_ sender: Any) {
-        length_lbl.text = String(Int(length_slider.value))
-    }
-    
     @IBAction func intensity_slider_change(_ sender: Any) {
-        intensity_lbl.text = String(Int(intensity_slider.value))
+        if Int(intensity_slider.value) == 0 {
+            intensity_lbl.text = "Easy"
+        }
+        else if Int(intensity_slider.value) == 1 {
+            intensity_lbl.text = "Medium"
+        }
+        else if Int(intensity_slider.value) == 2 {
+            intensity_lbl.text = "Hard"
+        }
     }
     
     @IBAction func snoozes_num_change(_ sender: Any) {
@@ -302,8 +304,7 @@ class ViewController: UIViewController {
                 //retrieves alarm data depending on index value
                 var editedAlarm = try context.fetch(request)
                 let oldAlarm = editedAlarm[index] as! NSManagedObject
-                length_slider.value = Float(oldAlarm.value(forKeyPath: "length") as! Int)
-                intensity_slider.value = Float(oldAlarm.value(forKeyPath: "intensity") as! Int)
+                intensity_slider.value = Float(oldAlarm.value(forKeyPath: "interactivity") as! Int)
                 duration_slider.value = Float(oldAlarm.value(forKeyPath: "duration") as! Int)
                 snoozes_num.value = Float(oldAlarm.value(forKeyPath: "snoozes") as! Int)
                 
@@ -390,8 +391,7 @@ class ViewController: UIViewController {
         }
         
         //setting all labels to default/retrived alarm values
-        length_lbl.text = String(Int(length_slider.value))
-        intensity_lbl.text = String(Int(intensity_slider.value))
+        intensity_lbl.text = "Easy"
         snoozes_num_lbl.text = String(Int(snoozes_num.value))
         duration_lbl.text = String(Int(duration_slider.value))
         
