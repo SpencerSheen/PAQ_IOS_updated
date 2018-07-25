@@ -7,6 +7,7 @@ target 'PAQ' do
 
   # Pods for PAQ
   pod 'UICircularProgressRing'
+  pod 'FLAnimatedImage'
 
   target 'PAQTests' do
     inherit! :search_paths

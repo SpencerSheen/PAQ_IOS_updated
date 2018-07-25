@@ -171,6 +171,14 @@ class TabBarController: UITabBarController{
     //from binary to decimal
     // Ex: 0000111 (Fri, Sat, Sun alarm) converts to a value of 7
     func extractDays(days: [Bool]) -> String{
+        //bit shifting shenanigans
+        /*var magicBitShifting = UInt8(0)
+        var shiftVal = 7
+        for day in days{
+            magicBitShifting = magicBitShifting | ((day ? 1 : 0) << shiftVal)
+            shiftVal -= 1;
+        }*/
+        
         var dayPower = Float(5)
         var daysToDec = 0
         for day in days{
