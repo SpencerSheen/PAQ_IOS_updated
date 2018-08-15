@@ -14,9 +14,7 @@ class BLE_signals: UIViewController{
     var centralManager: CBCentralManager?
     var peripheralManager: CBPeripheralManager?
     @IBOutlet weak var connectButton: UIButton!
-    @IBOutlet weak var aboutButton: UIButton!
-    @IBOutlet weak var reportButton: UIButton!
-    @IBOutlet weak var howToButton: UIButton!
+
     
     @IBAction func connect_btn(_ sender: Any) {
         //centralManager = CBCentralManager(delegate: self, queue: nil)
@@ -26,6 +24,9 @@ class BLE_signals: UIViewController{
         
     }
     
+    @IBAction func settings(_ sender: Any) {
+    
+    }
     @IBAction func openFB(_ sender: Any) {
         let Username =  "paqwear" // Your Instagram Username here
         let appURL = NSURL(string: "fb://profile/158751901522631")!
@@ -59,9 +60,7 @@ class BLE_signals: UIViewController{
         super.viewDidLoad()
         let goldBorder = UIColor(red: (252/255), green: 220/255, blue: 61/255, alpha: 1)
         connectButton.layer.borderColor = goldBorder.cgColor
-        aboutButton.layer.borderColor = goldBorder.cgColor
-        reportButton.layer.borderColor = goldBorder.cgColor
-        howToButton.layer.borderColor = goldBorder.cgColor
+        
         // Do any additional setup after loading the view.
     }
     

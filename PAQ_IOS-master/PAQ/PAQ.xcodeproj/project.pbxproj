@@ -14,6 +14,7 @@
 		882B7B782101482E0096FA05 /* facebook.png in Resources */ = {isa = PBXBuildFile; fileRef = 882B7B762101482E0096FA05 /* facebook.png */; };
 		882B7B7A2107B59E0096FA05 /* random-gif-1.gif in Resources */ = {isa = PBXBuildFile; fileRef = 882B7B792107B59E0096FA05 /* random-gif-1.gif */; };
 		882B7B7C2107B7270096FA05 /* LaunchScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 882B7B7B2107B7270096FA05 /* LaunchScreen.swift */; };
+		882B7B7E2122309D0096FA05 /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 882B7B7D2122309D0096FA05 /* Settings.swift */; };
 		886D163D2030F6DD00BAEB17 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 886D163C2030F6DD00BAEB17 /* CoreData.framework */; };
 		886D16402030F7FD00BAEB17 /* PAQ.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 886D163E2030F7FD00BAEB17 /* PAQ.xcdatamodeld */; };
 		887604CA20B76E9600F604B0 /* ht_snooze.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 887604C120B76E9200F604B0 /* ht_snooze.jpg */; };
@@ -70,6 +71,7 @@
 		882B7B762101482E0096FA05 /* facebook.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = facebook.png; sourceTree = "<group>"; };
 		882B7B792107B59E0096FA05 /* random-gif-1.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = "random-gif-1.gif"; sourceTree = "<group>"; };
 		882B7B7B2107B7270096FA05 /* LaunchScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchScreen.swift; sourceTree = "<group>"; };
+		882B7B7D2122309D0096FA05 /* Settings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Settings.swift; sourceTree = "<group>"; };
 		886D163C2030F6DD00BAEB17 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		886D163F2030F7FD00BAEB17 /* PAQ.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = PAQ.xcdatamodel; sourceTree = "<group>"; };
 		887604C120B76E9200F604B0 /* ht_snooze.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = ht_snooze.jpg; sourceTree = "<group>"; };
@@ -214,6 +216,7 @@
 				888F224320A6515D006ADAAC /* Popup.swift */,
 				887604D320B7749E00F604B0 /* HowTo.swift */,
 				882B7B7B2107B7270096FA05 /* LaunchScreen.swift */,
+				882B7B7D2122309D0096FA05 /* Settings.swift */,
 			);
 			path = PAQ;
 			sourceTree = "<group>";
@@ -432,6 +435,7 @@
 				9E3864EA2084157600921E53 /* TimerViewController.swift in Sources */,
 				9E3782EC202AE1FF00A07B86 /* TableViewCell.swift in Sources */,
 				9E69D44320438EFF009B96B9 /* BLE_signals.swift in Sources */,
+				882B7B7E2122309D0096FA05 /* Settings.swift in Sources */,
 				887604D420B7749E00F604B0 /* HowTo.swift in Sources */,
 				9E3782DC202ABC4200A07B86 /* ViewController.swift in Sources */,
 				88A998102074437400496CD9 /* TabBarController.swift in Sources */,
