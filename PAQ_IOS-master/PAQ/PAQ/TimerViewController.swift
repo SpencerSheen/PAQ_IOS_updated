@@ -26,6 +26,9 @@ class TimerViewController: UIViewController {
     @IBOutlet weak var len_lbl: UILabel!
     @IBOutlet weak var time_lbl: UILabel!
     
+    @IBOutlet weak var hard_button: UIButton!
+    @IBOutlet weak var medium_button: UIButton!
+    @IBOutlet weak var easy_button: UIButton!
     var seconds = 0
     var minutes = 0
     var hours = 0
@@ -34,6 +37,49 @@ class TimerViewController: UIViewController {
     var temp = 0
 
     var state = false
+    
+    var easy_clicked = true
+    var medium_clicked = false
+    var hard_clicked = false
+    @IBAction func easy_click(_ sender: Any) {
+        if easy_clicked == false{
+            easy_button.backgroundColor = UIColor(red: (252/255), green: 220/255, blue: 61/255, alpha: 1)
+            easy_button.setTitleColor(UIColor.black, for: .normal)
+            medium_button.backgroundColor = UIColor(red: 66/255, green: 66/255, blue: 66/255, alpha: 1)
+            medium_button.setTitleColor(UIColor.white, for: .normal)
+            hard_button.backgroundColor = UIColor(red: 66/255, green: 66/255, blue: 66/255, alpha: 1)
+            hard_button.setTitleColor(UIColor.white, for: .normal)
+            easy_clicked = true
+            medium_clicked = false
+            hard_clicked = false
+        }
+    }
+    @IBAction func medium_click(_ sender: Any) {
+        if medium_clicked == false{
+            medium_button.backgroundColor = UIColor(red: (252/255), green: 220/255, blue: 61/255, alpha: 1)
+            medium_button.setTitleColor(UIColor.black, for: .normal)
+            easy_button.backgroundColor = UIColor(red: 66/255, green: 66/255, blue: 66/255, alpha: 1)
+            easy_button.setTitleColor(UIColor.white, for: .normal)
+            hard_button.backgroundColor = UIColor(red: 66/255, green: 66/255, blue: 66/255, alpha: 1)
+            hard_button.setTitleColor(UIColor.white, for: .normal)
+            medium_clicked = true
+            easy_clicked = false
+            hard_clicked = false
+        }
+    }
+    @IBAction func hard_click(_ sender: Any) {
+        if hard_clicked == false{
+            hard_button.backgroundColor = UIColor(red: (252/255), green: 220/255, blue: 61/255, alpha: 1)
+            hard_button.setTitleColor(UIColor.black, for: .normal)
+            medium_button.backgroundColor = UIColor(red: 66/255, green: 66/255, blue: 66/255, alpha: 1)
+            medium_button.setTitleColor(UIColor.white, for: .normal)
+            easy_button.backgroundColor = UIColor(red: 66/255, green: 66/255, blue: 66/255, alpha: 1)
+            easy_button.setTitleColor(UIColor.white, for: .normal)
+            easy_clicked = false
+            medium_clicked = false
+            hard_clicked = true
+        }
+    }
     
     
     @IBAction func start_btn(_ sender: Any) {
@@ -46,6 +92,9 @@ class TimerViewController: UIViewController {
             intensity_slider.isHidden = true
             progress_ring.isHidden = false
             interact_lbl.isHidden = true
+            easy_button.isHidden = true
+            medium_button.isHidden = true
+            hard_button.isHidden = true
             //inten_lbl.isHidden = true
             //len_lbl.isHidden = true
             time_lbl.isHidden = false
@@ -65,10 +114,19 @@ class TimerViewController: UIViewController {
             time_lbl.text = String(format: "%02d:%02d:%02d", hours,minutes,seconds)
             state = true
 
+            var diff = 0
+            if easy_clicked == true{
+                diff = 0
+            } else if medium_clicked == true{
+                diff = 1
+            } else if hard_clicked == true{
+                diff = 2
+            }
+            
             let svc = tabBarController as! TabBarController
             svc.sendKey = 1
-            svc.timerString = getTimeString(timeHour: hours, timeMin: minutes, timeSec: seconds) +
-                String(Int(intensity_slider.value))
+            svc.timerString = getTimeString(timeHour: hours, timeMin: minutes, timeSec: seconds) + String(diff)
+                //String(Int(intensity_slider.value))
             currCentral?.connect(currPeripheral, options: nil)
             //svc.sendKey = 0
             //svc.timerSend = false
@@ -80,10 +138,13 @@ class TimerViewController: UIViewController {
             time_picker.isHidden = false
             //length_slider.isHidden = false
             //length_lbl.isHidden = false
-            intensity_lbl.isHidden = false
-            intensity_slider.isHidden = false
+            //intensity_lbl.isHidden = false
+            //intensity_slider.isHidden = false
             progress_ring.isHidden = true
             interact_lbl.isHidden = false
+            easy_button.isHidden = false
+            medium_button.isHidden = false
+            hard_button.isHidden = false
             //inten_lbl.isHidden = false
             //len_lbl.isHidden = false
             time_lbl.isHidden = true
@@ -137,6 +198,8 @@ class TimerViewController: UIViewController {
         progress_ring.isHidden = true
         progress_ring.shouldShowValueText = false
         time_lbl.isHidden = true
+        intensity_lbl.isHidden = true
+        intensity_slider.isHidden = true
         
         let svc = tabBarController as! TabBarController
         currCentral = svc.currCentral

@@ -39,6 +39,7 @@ class Bluetooth_connection: UIViewController,UITableViewDelegate {
             tabBar.currPeripheral = device
             tabBar.currCentral = oldCentral
             tabBar.tabIndex = 2
+            tabBar.alreadySent = true
         }
         //when Bluno is selected, take peripheral value of where the row was selected.
         //send new peripheral and central to TabBarController

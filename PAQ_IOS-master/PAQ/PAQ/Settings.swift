@@ -92,6 +92,7 @@ class Settings: UIViewController{
         if segue.identifier == "backSegue"{
             let tabBarController = segue.destination as! TabBarController
             tabBarController.tabIndex = 2
+            tabBarController.alreadySent = true
         }
         
     }

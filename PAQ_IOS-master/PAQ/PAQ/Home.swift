@@ -72,6 +72,9 @@ class Home: UIViewController{
         
         //currCentral?.connect(currPeripheral, options: nil)
         
+        let tabBar = self.tabBarController?.tabBar
+        tabBar?.selectionIndicatorImage = UIImage().createSelectionIndicator(color: UIColor(red: (252/255), green: 220/255, blue: 61/255, alpha: 1), size: CGSize(width: (tabBar?.frame.width)!/CGFloat((tabBar?.items!.count)!), height: (tabBar?.frame.height)!), lineWidth: 2.0)
+        
         print(currPeripheral)
     }
     

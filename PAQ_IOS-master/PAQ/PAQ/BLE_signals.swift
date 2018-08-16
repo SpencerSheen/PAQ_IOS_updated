@@ -59,7 +59,10 @@ class BLE_signals: UIViewController{
     override func viewDidLoad() {
         super.viewDidLoad()
         let goldBorder = UIColor(red: (252/255), green: 220/255, blue: 61/255, alpha: 1)
-        connectButton.layer.borderColor = goldBorder.cgColor
+        //connectButton.layer.borderColor = goldBorder.cgColor
+        
+        let tabBar = self.tabBarController?.tabBar
+        tabBar?.selectionIndicatorImage = UIImage().createSelectionIndicator(color: UIColor(red: (252/255), green: 220/255, blue: 61/255, alpha: 1), size: CGSize(width: (tabBar?.frame.width)!/CGFloat((tabBar?.items!.count)!), height: (tabBar?.frame.height)!), lineWidth: 2.0)
         
         // Do any additional setup after loading the view.
     }
@@ -96,7 +99,36 @@ class BLE_signals: UIViewController{
         print(peripheral)
     }*/
 }
-
+extension UIView {
+    
+    @IBInspectable var cornerRadius: CGFloat {
+        get {
+            return layer.cornerRadius
+        }
+        set {
+            layer.cornerRadius = newValue
+            layer.masksToBounds = newValue > 0
+        }
+    }
+    
+    @IBInspectable var borderWidth: CGFloat {
+        get {
+            return layer.borderWidth
+        }
+        set {
+            layer.borderWidth = newValue
+        }
+    }
+    
+    @IBInspectable var borderColor: UIColor? {
+        get {
+            return UIColor(cgColor: layer.borderColor!)
+        }
+        set {
+            layer.borderColor = newValue?.cgColor
+        }
+    }
+}
 
 /*
  extension BLE_signals: CBPeripheralManagerDelegate{

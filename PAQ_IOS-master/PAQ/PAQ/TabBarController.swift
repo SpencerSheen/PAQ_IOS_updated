@@ -118,8 +118,7 @@ class TabBarController: UITabBarController{
             }
         }
         self.selectedIndex = tabIndex
-        let tabBar = self.tabBarController?.tabBar
-        tabBar?.selectionIndicatorImage = UIImage().createSelectionIndicator(color: UIColor.blue, size: CGSize(width: (tabBar?.frame.width)!/CGFloat((tabBar?.items!.count)!), height: (tabBar?.frame.height)!), lineWidth: 2.0)
+        
     }
     
     
