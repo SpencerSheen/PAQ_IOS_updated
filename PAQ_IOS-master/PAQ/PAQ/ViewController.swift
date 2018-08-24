@@ -35,6 +35,9 @@ class ViewController: UIViewController {
     var currCentral: CBCentralManager?
     var currPeripheral: CBPeripheral!
     
+    /*
+     * Handling when each day of the week button is clicked. Switches colors from yellow to grey.
+     */
     @IBOutlet weak var monday_button: UIButton!
     var monday_clicked = false;
     @IBAction func monday_btn(_ sender: Any) {
@@ -132,9 +135,91 @@ class ViewController: UIViewController {
             sunday_clicked = false
         }
     }
+    
+    @IBOutlet weak var snoozeToggleVar: UISwitch!
+    var snoozeOn = 0
+    
+    /*
+     * Track snooze toggle on
+     */
+    @IBAction func toggleSnooze(_ sender: UISwitch) {
+        if(sender.isOn){
+            snoozeOn = 1
+        }
+        else{
+            snoozeOn = 0
+        }
+        
+    }
+    
+    
+    @IBOutlet weak var hard_button: UIButton!
+    @IBOutlet weak var medium_button: UIButton!
+    @IBOutlet weak var easy_button: UIButton!
+    
+    var easy_clicked = true
+    var medium_clicked = false
+    var hard_clicked = false
+    var diffValue = 0
+    
+    /*
+     * When easy button is clicked, set easy button to yellow and set rest of buttons to dark grey.
+     */
+    @IBAction func easy_click(_ sender: Any) {
+        if easy_clicked == false{
+            easy_button.backgroundColor = UIColor(red: (252/255), green: 220/255, blue: 61/255, alpha: 1)
+            easy_button.setTitleColor(UIColor.black, for: .normal)
+            medium_button.backgroundColor = UIColor(red: 66/255, green: 66/255, blue: 66/255, alpha: 1)
+            medium_button.setTitleColor(UIColor.white, for: .normal)
+            hard_button.backgroundColor = UIColor(red: 66/255, green: 66/255, blue: 66/255, alpha: 1)
+            hard_button.setTitleColor(UIColor.white, for: .normal)
+            easy_clicked = true
+            medium_clicked = false
+            hard_clicked = false
+            diffValue = 0
+        }
+    }
+    
+    /*
+     * When medium button is clicked, set medium button to yellow and set rest of buttons to dark grey.
+     */
+    @IBAction func medium_click(_ sender: Any) {
+        if medium_clicked == false{
+            medium_button.backgroundColor = UIColor(red: (252/255), green: 220/255, blue: 61/255, alpha: 1)
+            medium_button.setTitleColor(UIColor.black, for: .normal)
+            easy_button.backgroundColor = UIColor(red: 66/255, green: 66/255, blue: 66/255, alpha: 1)
+            easy_button.setTitleColor(UIColor.white, for: .normal)
+            hard_button.backgroundColor = UIColor(red: 66/255, green: 66/255, blue: 66/255, alpha: 1)
+            hard_button.setTitleColor(UIColor.white, for: .normal)
+            medium_clicked = true
+            easy_clicked = false
+            hard_clicked = false
+            diffValue = 1
+        }
+    }
+    
+    /*
+     * When hard button is clicked, set hard button to yellow and set rest of buttons to dark grey.
+     */
+    @IBAction func hard_click(_ sender: Any) {
+        if hard_clicked == false{
+            hard_button.backgroundColor = UIColor(red: (252/255), green: 220/255, blue: 61/255, alpha: 1)
+            hard_button.setTitleColor(UIColor.black, for: .normal)
+            medium_button.backgroundColor = UIColor(red: 66/255, green: 66/255, blue: 66/255, alpha: 1)
+            medium_button.setTitleColor(UIColor.white, for: .normal)
+            easy_button.backgroundColor = UIColor(red: 66/255, green: 66/255, blue: 66/255, alpha: 1)
+            easy_button.setTitleColor(UIColor.white, for: .normal)
+            easy_clicked = false
+            medium_clicked = false
+            hard_clicked = true
+            diffValue = 2
+        }
+    }
 
 
-    //Segue back to Tab bar controller
+    /*
+     * Segue back to tab bar controller
+     */
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         
         
@@ -174,8 +259,8 @@ class ViewController: UIViewController {
                     let newAlarm = editedAlarm[index] as! NSManagedObject
                     newAlarm.setValue(time, forKeyPath: "time")
                     newAlarm.setValue(repeat_days, forKeyPath: "days")
-                    newAlarm.setValue(Int(snoozes_num.value), forKeyPath: "snoozes")
-                    newAlarm.setValue(Int(intensity_slider.value), forKeyPath: "interactivity")
+                    newAlarm.setValue(snoozeOn, forKeyPath: "snoozes")
+                    newAlarm.setValue(diffValue, forKeyPath: "interactivity")
                     newAlarm.setValue(Int(duration_slider.value), forKeyPath: "duration")
                     do {
                         //send new data through bluetooth
@@ -189,14 +274,14 @@ class ViewController: UIViewController {
                     print("Could not fetch")
                 }
             }
-                //RUNS WHEN MAKING A NEW ALARM
+            //RUNS WHEN MAKING A NEW ALARM
             else{
                 let alarm = NSManagedObject(entity: entity!, insertInto: managedContext)
                 //setting up new alarm contents
                 alarm.setValue(time, forKeyPath: "time")
                 alarm.setValue(repeat_days, forKeyPath: "days")
-                alarm.setValue(Int(snoozes_num.value), forKeyPath: "snoozes")
-                alarm.setValue(Int(intensity_slider.value), forKeyPath: "interactivity")
+                alarm.setValue(snoozeOn, forKeyPath: "snoozes")
+                alarm.setValue(diffValue, forKeyPath: "interactivity")
                 alarm.setValue(Int(duration_slider.value), forKeyPath: "duration")
                 
                 alarm.setValue(true, forKeyPath: "active")
@@ -221,6 +306,9 @@ class ViewController: UIViewController {
         }
     }
     
+    /*
+     * Tracks difficulty with slider. NOT CURRENTLY BEING USED
+     */
     @IBAction func intensity_slider_change(_ sender: Any) {
         if Int(intensity_slider.value) == 0 {
             intensity_lbl.text = "Easy"
@@ -233,6 +321,9 @@ class ViewController: UIViewController {
         }
     }
     
+    /*
+     * BOTH FUNCTIONS NOT CURRENTLY BEING USED
+     */
     @IBAction func snoozes_num_change(_ sender: Any) {
         snoozes_num_lbl.text = String(Int(snoozes_num.value))
     }
@@ -240,6 +331,9 @@ class ViewController: UIViewController {
         duration_lbl.text = String(Int(duration_slider.value))
     }
     
+    /*
+     * Format alarm from timepicker
+     */
     func get_time() -> String{
         let timeFormat = DateFormatter()
         timeFormat.timeStyle = .short
@@ -289,9 +383,11 @@ class ViewController: UIViewController {
         
         //if editing the alarm, retrieve data and change sliders/time to corresponding data
         if edit == true{
+            
             //svc.alarmIndex = index
             //svc.sendKey = 3
             //setKeyValues(3)
+            
             //accessing coredata
             guard let appDelegate =
                 UIApplication.shared.delegate as? AppDelegate else {
@@ -304,18 +400,68 @@ class ViewController: UIViewController {
                 //retrieves alarm data depending on index value
                 var editedAlarm = try context.fetch(request)
                 let oldAlarm = editedAlarm[index] as! NSManagedObject
+                
+                //INTENSITY, DURATION, AND SNOOZES NOT CURRENTLY BEING USED
                 intensity_slider.value = Float(oldAlarm.value(forKeyPath: "interactivity") as! Int)
                 duration_slider.value = Float(oldAlarm.value(forKeyPath: "duration") as! Int)
                 snoozes_num.value = Float(oldAlarm.value(forKeyPath: "snoozes") as! Int)
                 
+                //retrieve old difficulty value
+                let oldDiff = Float(oldAlarm.value(forKeyPath: "interactivity") as! Int)
+                if oldDiff == 0{
+                    easy_button.backgroundColor = UIColor(red: (252/255), green: 220/255, blue: 61/255, alpha: 1)
+                    easy_button.setTitleColor(UIColor.black, for: .normal)
+                    medium_button.backgroundColor = UIColor(red: 66/255, green: 66/255, blue: 66/255, alpha: 1)
+                    medium_button.setTitleColor(UIColor.white, for: .normal)
+                    hard_button.backgroundColor = UIColor(red: 66/255, green: 66/255, blue: 66/255, alpha: 1)
+                    hard_button.setTitleColor(UIColor.white, for: .normal)
+                    easy_clicked = true
+                    medium_clicked = false
+                    hard_clicked = false
+                    diffValue = 0
+                }
+                else if oldDiff == 1{
+                    medium_button.backgroundColor = UIColor(red: (252/255), green: 220/255, blue: 61/255, alpha: 1)
+                    medium_button.setTitleColor(UIColor.black, for: .normal)
+                    easy_button.backgroundColor = UIColor(red: 66/255, green: 66/255, blue: 66/255, alpha: 1)
+                    easy_button.setTitleColor(UIColor.white, for: .normal)
+                    hard_button.backgroundColor = UIColor(red: 66/255, green: 66/255, blue: 66/255, alpha: 1)
+                    hard_button.setTitleColor(UIColor.white, for: .normal)
+                    medium_clicked = true
+                    easy_clicked = false
+                    hard_clicked = false
+                    diffValue = 1
+                }
+                else{
+                    hard_button.backgroundColor = UIColor(red: (252/255), green: 220/255, blue: 61/255, alpha: 1)
+                    hard_button.setTitleColor(UIColor.black, for: .normal)
+                    medium_button.backgroundColor = UIColor(red: 66/255, green: 66/255, blue: 66/255, alpha: 1)
+                    medium_button.setTitleColor(UIColor.white, for: .normal)
+                    easy_button.backgroundColor = UIColor(red: 66/255, green: 66/255, blue: 66/255, alpha: 1)
+                    easy_button.setTitleColor(UIColor.white, for: .normal)
+                    easy_clicked = false
+                    medium_clicked = false
+                    hard_clicked = true
+                    diffValue = 2
+                }
                 
+                //retreive old snooze value
+                let snoozeVal = Float(oldAlarm.value(forKeyPath: "snoozes") as! Int)
+                if snoozeVal == 0{
+                    snoozeToggleVar.setOn(false, animated: true)
+                }
+                else{
+                    snoozeToggleVar.setOn(true, animated: true)
+                }
+                
+                //retrieve old date and reformat
                 let dateFormatter = DateFormatter()
                 dateFormatter.timeStyle = .short
                 let oldDate = dateFormatter.date(from: oldAlarm.value(forKeyPath:"time") as! String)
                 time_picker.date = oldDate!
                 
+                //retreive old days of the week active
                 let days: [Bool] = oldAlarm.value(forKeyPath: "days") as? Array<Bool> ?? []
-                
                 if(days[0]){
                     monday_clicked = true
                     monday_button.backgroundColor = UIColor(red: (252/255), green: 220/255, blue: 61/255, alpha: 1)

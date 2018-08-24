@@ -14,7 +14,8 @@ class Home: UIViewController{
 
 
     @IBOutlet weak var bar: UINavigationBar!
-
+    @IBOutlet weak var tableFormat: UITableView!
+    
     //contains data from all alarms
     var alarms: [NSManagedObject] = []
     var BLEList: [NSManagedObject] = []
@@ -74,7 +75,8 @@ class Home: UIViewController{
         
         let tabBar = self.tabBarController?.tabBar
         tabBar?.selectionIndicatorImage = UIImage().createSelectionIndicator(color: UIColor(red: (252/255), green: 220/255, blue: 61/255, alpha: 1), size: CGSize(width: (tabBar?.frame.width)!/CGFloat((tabBar?.items!.count)!), height: (tabBar?.frame.height)!), lineWidth: 2.0)
-        
+        self.view.bringSubview(toFront: bar)
+        self.view.sendSubview(toBack: tableFormat)
         print(currPeripheral)
     }
     
@@ -179,6 +181,12 @@ extension Home: UITableViewDataSource, UITableViewDelegate {
     public func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int{
         return alarms.count
     }
+    
+    // Set the spacing between sections
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return 5
+    }
+
     
     //loops through alarms array to add cells to tableview
     public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell{

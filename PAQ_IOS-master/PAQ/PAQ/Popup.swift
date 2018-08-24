@@ -8,6 +8,9 @@
 
 import UIKit
 
+/*
+ * Popup message
+ */
 class Popup: UIViewController{
     
     @IBOutlet weak var popupLabel: UILabel!
@@ -22,6 +25,9 @@ class Popup: UIViewController{
         popupTitle.text = titleMessage
     }
     
+    /*
+     * Popup closes after screen is pressed
+     */
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         dismiss(animated: true, completion: nil)
     }

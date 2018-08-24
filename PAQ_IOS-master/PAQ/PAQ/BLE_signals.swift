@@ -27,6 +27,10 @@ class BLE_signals: UIViewController{
     @IBAction func settings(_ sender: Any) {
     
     }
+    
+    /*
+     * FACEBOOK AND INSTAGRAM FUNCTIONS NOT BEING USED HERE, SEE Settings.swift
+     */
     @IBAction func openFB(_ sender: Any) {
         let Username =  "paqwear" // Your Instagram Username here
         let appURL = NSURL(string: "fb://profile/158751901522631")!
@@ -61,10 +65,9 @@ class BLE_signals: UIViewController{
         let goldBorder = UIColor(red: (252/255), green: 220/255, blue: 61/255, alpha: 1)
         //connectButton.layer.borderColor = goldBorder.cgColor
         
+        //yellow underline current tab
         let tabBar = self.tabBarController?.tabBar
         tabBar?.selectionIndicatorImage = UIImage().createSelectionIndicator(color: UIColor(red: (252/255), green: 220/255, blue: 61/255, alpha: 1), size: CGSize(width: (tabBar?.frame.width)!/CGFloat((tabBar?.items!.count)!), height: (tabBar?.frame.height)!), lineWidth: 2.0)
-        
-        // Do any additional setup after loading the view.
     }
     
     //segue to go to the BLE tableview
@@ -76,6 +79,7 @@ class BLE_signals: UIViewController{
             alarmController.oldCentral = svc.currCentral
             alarmController.device = svc.currPeripheral
         }
+        //ABOUT AND REPORT SEGUES NOT CURRENTLY BEING USED HERE
         if segue.identifier == "aboutPopup"{
             let popupController = segue.destination as! Popup
             popupController.titleMessage = "About PAQ"
@@ -99,6 +103,10 @@ class BLE_signals: UIViewController{
         print(peripheral)
     }*/
 }
+
+/*
+ * Formatting code for rounding buttons, setting border width, and border color
+ */
 extension UIView {
     
     @IBInspectable var cornerRadius: CGFloat {

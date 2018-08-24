@@ -139,6 +139,9 @@ class TabBarController: UITabBarController{
         return totalAlarmString
     }
     
+    /*
+     * Reformat duration time. PROBABLY WON'T BE USED
+     */
     func extractDuration(value: String) -> String{
         if(value.count == 1){
             return "0" + value
@@ -148,6 +151,9 @@ class TabBarController: UITabBarController{
         }
     }
     
+    /*
+     * Reformat ID so it is always 3 digits
+     */
     func extractID(id: String) -> String {
         var newId = id
         //adds missing 0s if the Id value is too low
@@ -217,6 +223,7 @@ class TabBarController: UITabBarController{
     
 }
 
+//don't know what this is for
 extension UIImage {
     func createSelectionIndicator(color: UIColor, size: CGSize, lineWidth: CGFloat) -> UIImage {
         UIGraphicsBeginImageContextWithOptions(size, false, 0)
@@ -230,6 +237,7 @@ extension UIImage {
 
 extension TabBarController: CBCentralManagerDelegate{
     
+    //default ble function
     func centralManager(_ central: CBCentralManager, didConnect peripheral: CBPeripheral) {
         print("Connected")
         currPeripheral = peripheral
@@ -237,10 +245,12 @@ extension TabBarController: CBCentralManagerDelegate{
         peripheral.discoverServices(nil)
     }
     
+    //default ble function
     func centralManager(_ central: CBCentralManager, didFailToConnect peripheral: CBPeripheral, error: Error?) {
         print(error!)
     }
     
+    //adds peripherals to a list
     internal func centralManager(_ central: CBCentralManager, didDiscover peripheral: CBPeripheral, advertisementData: [String : Any], rssi RSSI: NSNumber) {
         if (!peripherals.contains(peripheral) && peripheral.name != nil){
             peripherals.append(peripheral)
@@ -273,6 +283,8 @@ extension TabBarController: CBCentralManagerDelegate{
 }
 
 extension TabBarController: CBPeripheralDelegate{
+    
+    //goes through all services in the peripheral
     func peripheral(_ peripheral: CBPeripheral, didDiscoverServices error: Error?) {
         guard let services = peripheral.services else { return }
         
@@ -319,13 +331,16 @@ extension TabBarController: CBPeripheralDelegate{
         if service.uuid == BATTERY_SVC {
             for char in service.characteristics!{
                 if char.uuid == BATTERY_UUID {
-                    print("BATTERY LEVEL: \(char.properties.rawValue)")
+                    guard let value = char.value else { return }
+                    let batteryVal = value[0]
+                    let batteryLvl = Int32(bitPattern: UInt32(batteryVal))
+                    print("BATTERY LEVEL: \(batteryLvl)")
                 }
             }
         }
         
         
-        //may need to add loop back to go through characteristics
+        //loops through all characteristics in each service
         for characteristic in characteristics {
             print("found \(characteristic.uuid)")
             
@@ -361,11 +376,15 @@ extension TabBarController: CBPeripheralDelegate{
                     
                     let dataToSend = (keyString + secString + minString + hourString + String(dayOfWeek) + DOMString + monString + String(year)).data(using: .utf8)!
                     peripheral.writeValue(dataToSend, for: characteristic, type: CBCharacteristicWriteType.withResponse)
-                }else if(sendKey == 1){
+                }
+                //sending timer data
+                else if(sendKey == 1){
                     let dataToSend = timerString.data(using: String.Encoding.utf8)
                     peripheral.writeValue(dataToSend!, for: characteristic, type: CBCharacteristicWriteType.withResponse)
                     //timerSend = false
-                }else if(sendKey == 2){
+                }
+                //sends full list of alarms
+                else if(sendKey == 2){
                     //loop through alarms
                     for alarms in allAlarms{
                         //convert alarm info into a string
@@ -375,7 +394,9 @@ extension TabBarController: CBPeripheralDelegate{
                         //send data to arduino
                         peripheral.writeValue(dataToSend!, for: characteristic, type: CBCharacteristicWriteType.withResponse)
                     }
-                }else if(sendKey == 3){
+                }
+                //sends newly edited or added individual alarm
+                else if(sendKey == 3){
                     var tempAlarmIndex = alarmIndex
                     totalAlarmString = "E"
                     //adding alarm
@@ -388,7 +409,9 @@ extension TabBarController: CBPeripheralDelegate{
                     let dataToSend = totalAlarmString.data(using: String.Encoding.utf8)
                     //send data to arduino
                     peripheral.writeValue(dataToSend!, for: characteristic, type: CBCharacteristicWriteType.withResponse)
-                }else if(sendKey == 4){
+                }
+                //sends deleted id number
+                else if(sendKey == 4){
                     totalAlarmString += "D" + idString
                     let dataToSend = totalAlarmString.data(using: String.Encoding.utf8)
                     //send data to arduino

@@ -8,6 +8,9 @@
 
 import UIKit
 
+/*
+ * STOPWATCH NOT CURRENTLY BEING USED
+ */
 class Stopwatch: UIViewController {
     
     var seconds = 0

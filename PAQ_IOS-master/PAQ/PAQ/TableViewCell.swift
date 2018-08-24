@@ -22,12 +22,17 @@ class TableViewCell: UITableViewCell {
     var svc: TabBarController!
     
     var index = 0
+    
+    /*
+     * Edits alarm data, saves to core data, and sends new edit through BLE
+     */
     @IBAction func changeToggle(_ sender: UISwitch) {
         
         //let svc = self.tabBarController as! TabBarController
         svc.sendKey = 3
         svc.alarmIndex = index
         
+        //retrieve core data
         guard let appDelegate =
             UIApplication.shared.delegate as? AppDelegate else {
                 return
@@ -60,20 +65,32 @@ class TableViewCell: UITableViewCell {
         
     }
     
+    /*
+     * Set alarm string that will be displayed to user
+     */
     func setAlarmLabel(alarm: NSManagedObject){
         time_lbl.text = alarm.value(forKeyPath: "time") as? String
     }
     
+    /*
+     * Set index of order of alarm
+     */
     func setIndex(index: Int){
         self.index = index
     }
     
+    /*
+     * Move ble variables so toggle function can work properly
+     */
     func setBLE(central: CBCentralManager, peripheral: CBPeripheral, svc: TabBarController){
         self.currCentral = central
         self.currPeripheral = peripheral
         self.svc = svc
     }
     
+    /*
+     * Goes through array to display active days
+     */
     func setDayLabel(alarm: NSManagedObject){
         let days: [Bool] = alarm.value(forKeyPath: "days") as? Array<Bool> ?? []
         var totalText = ""
@@ -101,6 +118,9 @@ class TableViewCell: UITableViewCell {
         day_lbl.text = totalText;
     }
     
+    /*
+     * Set toggle depending on core data value
+     */
     func setToggle(alarm: NSManagedObject){
         let toggle = alarm.value(forKeyPath: "active") as? Bool
         active_toggle.setOn(toggle!, animated: true)

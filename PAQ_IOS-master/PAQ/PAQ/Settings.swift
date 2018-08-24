@@ -8,14 +8,6 @@
 
 import Foundation
 
-//
-//  BLE_signals.swift
-//  PAQ
-//
-//  Created by Karan Sunil on 2/25/18.
-//  Copyright © 2018 PAQ. All rights reserved.
-//
-
 import UIKit
 import CoreBluetooth
 
@@ -31,6 +23,9 @@ class Settings: UIViewController{
     @IBAction func showAbout(_ sender: Any){
     }
     
+    /*
+     * Opens PAQ on facebook app, if there is no app, opens on website
+     */
     @IBAction func openFB(_ sender: Any) {
         
         let Username =  "paqwear" // Your Instagram Username here
@@ -46,6 +41,9 @@ class Settings: UIViewController{
         }
     }
     
+    /*
+     * Opens PAQ on instagram app, if there is no app, opens on website
+     */
     @IBAction func openIG(_ sender: Any) {
         let Username = "paqwear"
         let appURL = NSURL(string: "instagram://user?username=\(Username)")!
@@ -63,32 +61,37 @@ class Settings: UIViewController{
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        //tried to set up border(probably not working properly here)
         let goldBorder = UIColor(red: (252/255), green: 220/255, blue: 61/255, alpha: 1)
         aboutButton.layer.borderColor = goldBorder.cgColor
         reportButton.layer.borderColor = goldBorder.cgColor
         howToButton.layer.borderColor = goldBorder.cgColor
-        // Do any additional setup after loading the view.
     }
     
     //segue to go to the BLE tableview
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         //pass old alarm data objects
+        //connectSegue not being used here
         if segue.identifier == "connectSegue"{
             let svc = tabBarController as! TabBarController
             let alarmController = segue.destination as! Bluetooth_connection
             alarmController.oldCentral = svc.currCentral
             alarmController.device = svc.currPeripheral
         }
+        //sets text for about popup
         if segue.identifier == "aboutPopup"{
             let popupController = segue.destination as! Popup
             popupController.titleMessage = "About PAQ"
             popupController.labelMessage = "Thank you for downloading our app! We are serious about bringing the best start to people's days, and we're happy that you're on the same page. We would love for you to share your thoughts on anything, from our product to the quality of your mornings. \n \n Please reach out to us at social@paqwear.com, and be sure to follow us @paqwear"
         }
+        //sets text for report popup
         if segue.identifier == "reportPopup"{
             let popupController = segue.destination as! Popup
             popupController.titleMessage = "Report a Problem"
             popupController.labelMessage = "Has something gone wrong? Could we be doing something better? We are continually working to deliver the best product possible and so we encourage you to share your experience with us. \n \n You can reach us at social@paqwear.com"
         }
+        //goes back to more tab
         if segue.identifier == "backSegue"{
             let tabBarController = segue.destination as! TabBarController
             tabBarController.tabIndex = 2

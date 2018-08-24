@@ -15,6 +15,9 @@ class TimerViewController: UIViewController {
     
     @IBOutlet weak var time_picker: UIDatePicker!
     
+    @IBOutlet weak var timerbar: UINavigationBar!
+    @IBOutlet weak var difficultyview: UIView!
+    @IBOutlet weak var timepickerview: UIView!
     @IBOutlet weak var length_lbl: UILabel!
     @IBOutlet weak var length_slider: UISlider!
     @IBOutlet weak var intensity_lbl: UILabel!
@@ -41,6 +44,9 @@ class TimerViewController: UIViewController {
     var easy_clicked = true
     var medium_clicked = false
     var hard_clicked = false
+    /*
+     * When easy button is clicked, set easy button to yellow and set rest of buttons to dark grey.
+     */
     @IBAction func easy_click(_ sender: Any) {
         if easy_clicked == false{
             easy_button.backgroundColor = UIColor(red: (252/255), green: 220/255, blue: 61/255, alpha: 1)
@@ -54,6 +60,10 @@ class TimerViewController: UIViewController {
             hard_clicked = false
         }
     }
+    
+    /*
+     * When medium button is clicked, set medium button to yellow and set rest of buttons to dark grey.
+     */
     @IBAction func medium_click(_ sender: Any) {
         if medium_clicked == false{
             medium_button.backgroundColor = UIColor(red: (252/255), green: 220/255, blue: 61/255, alpha: 1)
@@ -67,6 +77,10 @@ class TimerViewController: UIViewController {
             hard_clicked = false
         }
     }
+    
+    /*
+     * When hard button is clicked, set hard button to yellow and set rest of buttons to dark grey.
+     */
     @IBAction func hard_click(_ sender: Any) {
         if hard_clicked == false{
             hard_button.backgroundColor = UIColor(red: (252/255), green: 220/255, blue: 61/255, alpha: 1)
@@ -81,11 +95,17 @@ class TimerViewController: UIViewController {
         }
     }
     
-    
+    /*
+     * When start button is pressed, hide everything except the time ring circle, time label. Start button becomes
+     * the cancel button.
+     * Send time that timer will end through BLE
+     */
     @IBAction func start_btn(_ sender: Any) {
         if state == false {
             time = time_picker.countDownDuration
             time_picker.isHidden = true
+            timepickerview.isHidden = true
+            difficultyview.isHidden = true
             //length_slider.isHidden = true
             //length_lbl.isHidden = true
             intensity_lbl.isHidden = true
@@ -114,6 +134,7 @@ class TimerViewController: UIViewController {
             time_lbl.text = String(format: "%02d:%02d:%02d", hours,minutes,seconds)
             state = true
 
+            //find which difficulty is selected
             var diff = 0
             if easy_clicked == true{
                 diff = 0
@@ -123,6 +144,7 @@ class TimerViewController: UIViewController {
                 diff = 2
             }
             
+            //send time through BLE
             let svc = tabBarController as! TabBarController
             svc.sendKey = 1
             svc.timerString = getTimeString(timeHour: hours, timeMin: minutes, timeSec: seconds) + String(diff)
@@ -132,10 +154,14 @@ class TimerViewController: UIViewController {
             //svc.timerSend = false
 
             timer = Timer.scheduledTimer(timeInterval: 0.01, target: self, selector: #selector(clock), userInfo: nil, repeats: true)
-        } else {
+        }
+        //When cancel button is pressed, show everything except the time ring circle, time label, and cancel button
+        else {
             timer.invalidate()
             time = time_picker.countDownDuration
             time_picker.isHidden = false
+            timepickerview.isHidden = false
+            difficultyview.isHidden = false
             //length_slider.isHidden = false
             //length_lbl.isHidden = false
             //intensity_lbl.isHidden = false
@@ -151,15 +177,17 @@ class TimerViewController: UIViewController {
             start_b.setTitle("Start", for: .normal)
             state = false
             
+            //send cancel message through BLE
             let svc = tabBarController as! TabBarController
             svc.sendKey = 1
             svc.timerString = "C"
             currCentral?.connect(currPeripheral, options: nil)
         }
-        
-        
     }
     
+    /*
+     * Animates the time ring and counts down time
+     */
     @objc func clock(){
         if((progress_ring.currentValue!) == 0.0){
             timer.invalidate()
@@ -178,7 +206,9 @@ class TimerViewController: UIViewController {
     }
     
 
-    
+    /*
+     * old difficulty slider. NOT CURRENTLY BEING USED
+     */
     @IBAction func intensity_action(_ sender: Any) {
         if Int(intensity_slider.value) == 0 {
             intensity_lbl.text = "Easy"
@@ -201,10 +231,12 @@ class TimerViewController: UIViewController {
         intensity_lbl.isHidden = true
         intensity_slider.isHidden = true
         
+        //bring top bar to front so layout is better
+        self.view.bringSubview(toFront: timerbar)
+        //take CBCentral and CBPeripheral value from TabBarController
         let svc = tabBarController as! TabBarController
         currCentral = svc.currCentral
         currPeripheral = svc.currPeripheral
-        // Do any additional setup after loading the view.
     }
     
     
@@ -218,7 +250,9 @@ class TimerViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
-    
+    /*
+     * Organizing time string in proper form to be sent through BLE
+     */
     func getTimeString(timeHour:Int, timeMin:Int, timeSec:Int) -> String{
         
         let date = Date()
