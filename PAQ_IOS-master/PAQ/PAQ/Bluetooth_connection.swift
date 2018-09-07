@@ -65,11 +65,16 @@ class Bluetooth_connection: UIViewController,UITableViewDelegate {
         // Dispose of any resources that can be recreated.
     }
     
-    
+    /*
+     * Scans for available BLE devices right when view loads up
+     */
     override func viewDidAppear(_ animated: Bool) {
         scanBLE()
     }
     
+    /*
+     * Attempts to find available services
+     */
     func scanBLE(){
         centralManager?.scanForPeripherals(withServices: nil, options: nil)
     }
@@ -106,6 +111,7 @@ class Bluetooth_connection: UIViewController,UITableViewDelegate {
         }
     }
     
+    //get id to length 3 string
     func extractID(id: String) -> String {
         var newId = id
         //adds missing 0s if the Id value is too low
@@ -192,6 +198,9 @@ extension Bluetooth_connection: UITableViewDataSource {
 
 extension Bluetooth_connection: CBCentralManagerDelegate{
     
+    /*
+     * Receives the peripheral and takes the services apart
+     */
     func centralManager(_ central: CBCentralManager, didConnect peripheral: CBPeripheral) {
         print("Connected")
         alarmPeripheral = peripheral
@@ -211,6 +220,9 @@ extension Bluetooth_connection: CBCentralManagerDelegate{
         
     }
     
+    /*
+     * Checks central to make sure it is valid to send data
+     */
     func centralManagerDidUpdateState(_ central: CBCentralManager) {
         switch central.state{
         case .unknown:
@@ -231,6 +243,10 @@ extension Bluetooth_connection: CBCentralManagerDelegate{
 }
 
 extension Bluetooth_connection: CBPeripheralDelegate{
+    
+    /*
+     * Loops through all the services to take apart all of the characteristics in each service
+     */
     func peripheral(_ peripheral: CBPeripheral, didDiscoverServices error: Error?) {
         guard let services = peripheral.services else { return }
         
@@ -241,6 +257,9 @@ extension Bluetooth_connection: CBPeripheralDelegate{
         }
     }
     
+    /*
+     * Not sure what this does lol
+     */
     func peripheral(_ peripheral: CBPeripheral,
                     didModifyServices invalidatedServices: [CBService]){
         print("DID MODIFY SERVICES")
@@ -253,6 +272,9 @@ extension Bluetooth_connection: CBPeripheralDelegate{
         print(error ?? "unknown error")
     }
     
+    /*
+     * Goes through all characteristics and sends alarm data to each one
+     */
     func peripheral(_ peripheral: CBPeripheral, didDiscoverCharacteristicsFor service: CBService, error: Error?) {
         guard let characteristics = service.characteristics else {
             return
@@ -260,28 +282,28 @@ extension Bluetooth_connection: CBPeripheralDelegate{
         //may need to add loop back to go through characteristics
         for characteristic in characteristics {
         
-        //Get all existing alarms
-        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else {
-            return
-        }
-        let context = appDelegate.persistentContainer.viewContext
-        let request = NSFetchRequest<NSFetchRequestResult>(entityName: "AlarmList")
-        var totalAlarmString = ""
-        do{
-            let allAlarms = try context.fetch(request)
-            
-            //loop through alarms
-            for alarms in allAlarms{
-                //convert alarm info into a string
-                totalAlarmString = getAlarm(alarms: alarms as! NSManagedObject)
-                //convert alarm string to data type that is sendable
-                let dataToSend = totalAlarmString.data(using: String.Encoding.utf8)
-                //send data to arduino
-                peripheral.writeValue(dataToSend!, for: characteristic, type: CBCharacteristicWriteType.withResponse)
+            //Get all existing alarms
+            guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else {
+                return
             }
-        } catch {
-            print("Could not fetch")
-        }
+            let context = appDelegate.persistentContainer.viewContext
+            let request = NSFetchRequest<NSFetchRequestResult>(entityName: "AlarmList")
+            var totalAlarmString = ""
+            do{
+                let allAlarms = try context.fetch(request)
+                
+                //loop through alarms
+                for alarms in allAlarms{
+                    //convert alarm info into a string
+                    totalAlarmString = getAlarm(alarms: alarms as! NSManagedObject)
+                    //convert alarm string to data type that is sendable
+                    let dataToSend = totalAlarmString.data(using: String.Encoding.utf8)
+                    //send data to arduino
+                    peripheral.writeValue(dataToSend!, for: characteristic, type: CBCharacteristicWriteType.withResponse)
+                }
+            } catch {
+                print("Could not fetch")
+            }
         }
     }
 }
