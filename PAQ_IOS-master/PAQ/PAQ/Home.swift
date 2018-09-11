@@ -126,7 +126,7 @@ class Home: UIViewController{
             print(currPeripheral)
             if (currPeripheral == nil || currPeripheral.state != .connected) {
                 isConnected = false
-                showToast(message: "No BLE!")
+                showToast(message: "Connect to a PAQ device to make changes")
             }
             else{
                 isConnected = true
@@ -202,7 +202,7 @@ extension Home: UITableViewDataSource, UITableViewDelegate {
         
         if(self.currPeripheral != nil){
             let svc = tabBarController as! TabBarController
-            cell.setBLE(central: self.currCentral!, peripheral: self.currPeripheral, svc: svc)
+            cell.setBLE(central: self.currCentral!, peripheral: self.currPeripheral, svc: svc, message: self)
         }
         
         //index used to send data to TableViewCell for the alarm toggle
@@ -287,6 +287,9 @@ extension Home: UITableViewDataSource, UITableViewDelegate {
             swipeAction.performsFirstActionWithFullSwipe = false
             return swipeAction
         }
+        else{
+            showToast(message: "Connect to a PAQ device to make changes")
+        }
         return nil
     }
     
@@ -302,9 +305,12 @@ extension Home: UITableViewDataSource, UITableViewDelegate {
         return newId
     }
     
+    /*
+     * Send toast message as notification
+     */
     func showToast(message : String) {
         
-        let toastLabel = UILabel(frame: CGRect(x: self.view.frame.size.width/2 - 75, y: self.view.frame.size.height-100, width: 150, height: 35))
+        let toastLabel = UILabel(frame: CGRect(x: self.view.frame.size.width/16, y: self.view.frame.size.height-100, width: self.view.frame.size.width*7/8, height: 35))
         toastLabel.backgroundColor = UIColor.black.withAlphaComponent(0.6)
         toastLabel.textColor = UIColor.white
         toastLabel.textAlignment = .center;

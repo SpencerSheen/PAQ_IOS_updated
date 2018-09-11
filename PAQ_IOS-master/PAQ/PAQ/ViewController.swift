@@ -167,12 +167,9 @@ class ViewController: UIViewController {
      */
     @IBAction func easy_click(_ sender: Any) {
         if easy_clicked == false{
-            easy_button.backgroundColor = UIColor(red: (252/255), green: 220/255, blue: 61/255, alpha: 1)
-            easy_button.setTitleColor(UIColor.black, for: .normal)
-            medium_button.backgroundColor = UIColor(red: 66/255, green: 66/255, blue: 66/255, alpha: 1)
-            medium_button.setTitleColor(UIColor.white, for: .normal)
-            hard_button.backgroundColor = UIColor(red: 66/255, green: 66/255, blue: 66/255, alpha: 1)
-            hard_button.setTitleColor(UIColor.white, for: .normal)
+            easy_button.borderColor = UIColor(red: (252/255), green: 220/255, blue: 61/255, alpha: 1)
+            medium_button.borderColor = UIColor(red: 77/255, green: 77/255, blue: 77/255, alpha: 1)
+            hard_button.borderColor = UIColor(red: 77/255, green: 77/255, blue: 77/255, alpha: 1)
             easy_clicked = true
             medium_clicked = false
             hard_clicked = false
@@ -185,12 +182,9 @@ class ViewController: UIViewController {
      */
     @IBAction func medium_click(_ sender: Any) {
         if medium_clicked == false{
-            medium_button.backgroundColor = UIColor(red: (252/255), green: 220/255, blue: 61/255, alpha: 1)
-            medium_button.setTitleColor(UIColor.black, for: .normal)
-            easy_button.backgroundColor = UIColor(red: 66/255, green: 66/255, blue: 66/255, alpha: 1)
-            easy_button.setTitleColor(UIColor.white, for: .normal)
-            hard_button.backgroundColor = UIColor(red: 66/255, green: 66/255, blue: 66/255, alpha: 1)
-            hard_button.setTitleColor(UIColor.white, for: .normal)
+            medium_button.borderColor = UIColor(red: (252/255), green: 220/255, blue: 61/255, alpha: 1)
+            easy_button.borderColor = UIColor(red: 77/255, green: 77/255, blue: 77/255, alpha: 1)
+            hard_button.borderColor = UIColor(red: 77/255, green: 77/255, blue: 77/255, alpha: 1)
             medium_clicked = true
             easy_clicked = false
             hard_clicked = false
@@ -203,12 +197,9 @@ class ViewController: UIViewController {
      */
     @IBAction func hard_click(_ sender: Any) {
         if hard_clicked == false{
-            hard_button.backgroundColor = UIColor(red: (252/255), green: 220/255, blue: 61/255, alpha: 1)
-            hard_button.setTitleColor(UIColor.black, for: .normal)
-            medium_button.backgroundColor = UIColor(red: 66/255, green: 66/255, blue: 66/255, alpha: 1)
-            medium_button.setTitleColor(UIColor.white, for: .normal)
-            easy_button.backgroundColor = UIColor(red: 66/255, green: 66/255, blue: 66/255, alpha: 1)
-            easy_button.setTitleColor(UIColor.white, for: .normal)
+            hard_button.borderColor = UIColor(red: (252/255), green: 220/255, blue: 61/255, alpha: 1)
+            medium_button.borderColor = UIColor(red: 77/255, green: 77/255, blue: 77/255, alpha: 1)
+            easy_button.borderColor = UIColor(red: 77/255, green: 77/255, blue: 77/255, alpha: 1)
             easy_clicked = false
             medium_clicked = false
             hard_clicked = true
@@ -409,36 +400,27 @@ class ViewController: UIViewController {
                 //retrieve old difficulty value
                 let oldDiff = Float(oldAlarm.value(forKeyPath: "interactivity") as! Int)
                 if oldDiff == 0{
-                    easy_button.backgroundColor = UIColor(red: (252/255), green: 220/255, blue: 61/255, alpha: 1)
-                    easy_button.setTitleColor(UIColor.black, for: .normal)
-                    medium_button.backgroundColor = UIColor(red: 66/255, green: 66/255, blue: 66/255, alpha: 1)
-                    medium_button.setTitleColor(UIColor.white, for: .normal)
-                    hard_button.backgroundColor = UIColor(red: 66/255, green: 66/255, blue: 66/255, alpha: 1)
-                    hard_button.setTitleColor(UIColor.white, for: .normal)
+                    easy_button.borderColor = UIColor(red: (252/255), green: 220/255, blue: 61/255, alpha: 1)
+                    medium_button.borderColor = UIColor(red: 77/255, green: 77/255, blue: 77/255, alpha: 1)
+                    hard_button.borderColor = UIColor(red: 77/255, green: 77/255, blue: 77/255, alpha: 1)
                     easy_clicked = true
                     medium_clicked = false
                     hard_clicked = false
                     diffValue = 0
                 }
                 else if oldDiff == 1{
-                    medium_button.backgroundColor = UIColor(red: (252/255), green: 220/255, blue: 61/255, alpha: 1)
-                    medium_button.setTitleColor(UIColor.black, for: .normal)
-                    easy_button.backgroundColor = UIColor(red: 66/255, green: 66/255, blue: 66/255, alpha: 1)
-                    easy_button.setTitleColor(UIColor.white, for: .normal)
-                    hard_button.backgroundColor = UIColor(red: 66/255, green: 66/255, blue: 66/255, alpha: 1)
-                    hard_button.setTitleColor(UIColor.white, for: .normal)
+                    medium_button.borderColor = UIColor(red: (252/255), green: 220/255, blue: 61/255, alpha: 1)
+                    easy_button.borderColor = UIColor(red: 77/255, green: 77/255, blue: 77/255, alpha: 1)
+                    hard_button.borderColor = UIColor(red: 77/255, green: 77/255, blue: 77/255, alpha: 1)
                     medium_clicked = true
                     easy_clicked = false
                     hard_clicked = false
                     diffValue = 1
                 }
                 else{
-                    hard_button.backgroundColor = UIColor(red: (252/255), green: 220/255, blue: 61/255, alpha: 1)
-                    hard_button.setTitleColor(UIColor.black, for: .normal)
-                    medium_button.backgroundColor = UIColor(red: 66/255, green: 66/255, blue: 66/255, alpha: 1)
-                    medium_button.setTitleColor(UIColor.white, for: .normal)
-                    easy_button.backgroundColor = UIColor(red: 66/255, green: 66/255, blue: 66/255, alpha: 1)
-                    easy_button.setTitleColor(UIColor.white, for: .normal)
+                    hard_button.borderColor = UIColor(red: (252/255), green: 220/255, blue: 61/255, alpha: 1)
+                    medium_button.borderColor = UIColor(red: 77/255, green: 77/255, blue: 77/255, alpha: 1)
+                    easy_button.borderColor = UIColor(red: 77/255, green: 77/255, blue: 77/255, alpha: 1)
                     easy_clicked = false
                     medium_clicked = false
                     hard_clicked = true

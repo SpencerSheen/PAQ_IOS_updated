@@ -20,6 +20,7 @@ class TableViewCell: UITableViewCell {
     var currCentral: CBCentralManager?
     var currPeripheral: CBPeripheral!
     var svc: TabBarController!
+    var message: Home!
     
     var index = 0
     
@@ -28,39 +29,51 @@ class TableViewCell: UITableViewCell {
      */
     @IBAction func changeToggle(_ sender: UISwitch) {
         
-        //let svc = self.tabBarController as! TabBarController
-        svc.sendKey = 3
-        svc.alarmIndex = index
-        
-        //retrieve core data
-        guard let appDelegate =
-            UIApplication.shared.delegate as? AppDelegate else {
-                return
-        }
-        
-        let managedContext = appDelegate.persistentContainer.viewContext
-        let request = NSFetchRequest<NSFetchRequestResult>(entityName: "AlarmList")
-        do{
-            let editedAlarm = try managedContext.fetch(request)
-            let newAlarm = editedAlarm[index] as! NSManagedObject
+        if (currPeripheral == nil || currPeripheral.state != .connected) {
             if(sender.isOn)
             {
-                newAlarm.setValue(true, forKeyPath: "active")
+                //active_toggle.setOn(false, animated: false)
             }
             else{
-                newAlarm.setValue(false, forKeyPath: "active")
+                active_toggle.setOn(true, animated: false)
             }
-            print(self.currPeripheral)
+            message.showToast(message: "Connect to a PAQ device to make changes")
+        }
+        else{
+            //let svc = self.tabBarController as! TabBarController
+            svc.sendKey = 3
+            svc.alarmIndex = index
             
-            //sends new data through bluetooth
-            self.currCentral?.connect(self.currPeripheral, options: nil)
-            do {
-                try managedContext.save()
-            } catch {
-                print("Could not save")
+            //retrieve core data
+            guard let appDelegate =
+                UIApplication.shared.delegate as? AppDelegate else {
+                    return
             }
-        } catch {
-            print("Could not fetch")
+            
+            let managedContext = appDelegate.persistentContainer.viewContext
+            let request = NSFetchRequest<NSFetchRequestResult>(entityName: "AlarmList")
+            do{
+                let editedAlarm = try managedContext.fetch(request)
+                let newAlarm = editedAlarm[index] as! NSManagedObject
+                if(sender.isOn)
+                {
+                    newAlarm.setValue(true, forKeyPath: "active")
+                }
+                else{
+                    newAlarm.setValue(false, forKeyPath: "active")
+                }
+                print(self.currPeripheral)
+                
+                //sends new data through bluetooth
+                self.currCentral?.connect(self.currPeripheral, options: nil)
+                do {
+                    try managedContext.save()
+                } catch {
+                    print("Could not save")
+                }
+            } catch {
+                print("Could not fetch")
+            }
         }
         
     }
@@ -82,10 +95,11 @@ class TableViewCell: UITableViewCell {
     /*
      * Move ble variables so toggle function can work properly
      */
-    func setBLE(central: CBCentralManager, peripheral: CBPeripheral, svc: TabBarController){
+    func setBLE(central: CBCentralManager, peripheral: CBPeripheral, svc: TabBarController, message: Home){
         self.currCentral = central
         self.currPeripheral = peripheral
         self.svc = svc
+        self.message = message
     }
     
     /*

@@ -49,12 +49,9 @@ class TimerViewController: UIViewController {
      */
     @IBAction func easy_click(_ sender: Any) {
         if easy_clicked == false{
-            easy_button.backgroundColor = UIColor(red: (252/255), green: 220/255, blue: 61/255, alpha: 1)
-            easy_button.setTitleColor(UIColor.black, for: .normal)
-            medium_button.backgroundColor = UIColor(red: 66/255, green: 66/255, blue: 66/255, alpha: 1)
-            medium_button.setTitleColor(UIColor.white, for: .normal)
-            hard_button.backgroundColor = UIColor(red: 66/255, green: 66/255, blue: 66/255, alpha: 1)
-            hard_button.setTitleColor(UIColor.white, for: .normal)
+            easy_button.borderColor = UIColor(red: (252/255), green: 220/255, blue: 61/255, alpha: 1)
+            medium_button.borderColor = UIColor(red: 77/255, green: 77/255, blue: 77/255, alpha: 1)
+            hard_button.borderColor = UIColor(red: 77/255, green: 77/255, blue: 77/255, alpha: 1)
             easy_clicked = true
             medium_clicked = false
             hard_clicked = false
@@ -66,12 +63,9 @@ class TimerViewController: UIViewController {
      */
     @IBAction func medium_click(_ sender: Any) {
         if medium_clicked == false{
-            medium_button.backgroundColor = UIColor(red: (252/255), green: 220/255, blue: 61/255, alpha: 1)
-            medium_button.setTitleColor(UIColor.black, for: .normal)
-            easy_button.backgroundColor = UIColor(red: 66/255, green: 66/255, blue: 66/255, alpha: 1)
-            easy_button.setTitleColor(UIColor.white, for: .normal)
-            hard_button.backgroundColor = UIColor(red: 66/255, green: 66/255, blue: 66/255, alpha: 1)
-            hard_button.setTitleColor(UIColor.white, for: .normal)
+            medium_button.borderColor = UIColor(red: (252/255), green: 220/255, blue: 61/255, alpha: 1)
+            easy_button.borderColor = UIColor(red: 77/255, green: 77/255, blue: 77/255, alpha: 1)
+            hard_button.borderColor = UIColor(red: 77/255, green: 77/255, blue: 77/255, alpha: 1)
             medium_clicked = true
             easy_clicked = false
             hard_clicked = false
@@ -83,12 +77,9 @@ class TimerViewController: UIViewController {
      */
     @IBAction func hard_click(_ sender: Any) {
         if hard_clicked == false{
-            hard_button.backgroundColor = UIColor(red: (252/255), green: 220/255, blue: 61/255, alpha: 1)
-            hard_button.setTitleColor(UIColor.black, for: .normal)
-            medium_button.backgroundColor = UIColor(red: 66/255, green: 66/255, blue: 66/255, alpha: 1)
-            medium_button.setTitleColor(UIColor.white, for: .normal)
-            easy_button.backgroundColor = UIColor(red: 66/255, green: 66/255, blue: 66/255, alpha: 1)
-            easy_button.setTitleColor(UIColor.white, for: .normal)
+            hard_button.borderColor = UIColor(red: (252/255), green: 220/255, blue: 61/255, alpha: 1)
+            medium_button.borderColor = UIColor(red: 77/255, green: 77/255, blue: 77/255, alpha: 1)
+            easy_button.borderColor = UIColor(red: 77/255, green: 77/255, blue: 77/255, alpha: 1)
             easy_clicked = false
             medium_clicked = false
             hard_clicked = true
@@ -101,87 +92,92 @@ class TimerViewController: UIViewController {
      * Send time that timer will end through BLE
      */
     @IBAction func start_btn(_ sender: Any) {
-        if state == false {
-            time = time_picker.countDownDuration
-            time_picker.isHidden = true
-            timepickerview.isHidden = true
-            difficultyview.isHidden = true
-            //length_slider.isHidden = true
-            //length_lbl.isHidden = true
-            intensity_lbl.isHidden = true
-            intensity_slider.isHidden = true
-            progress_ring.isHidden = false
-            interact_lbl.isHidden = true
-            easy_button.isHidden = true
-            medium_button.isHidden = true
-            hard_button.isHidden = true
-            //inten_lbl.isHidden = true
-            //len_lbl.isHidden = true
-            time_lbl.isHidden = false
-            start_b.setTitle("Cancel", for: .normal)
-        
-            progress_ring.maxValue = CGFloat(time)
-            print(progress_ring.maxValue)
-            progress_ring.minValue = 0.0
-            progress_ring.value = CGFloat(time)
-
-            hours = (Int(time)) / 3600
-            temp = (Int(time)) % 3600
-            minutes = temp / 60
-            temp = temp % 60
-            seconds = temp
-            progress_ring.shouldShowValueText = false
-            time_lbl.text = String(format: "%02d:%02d:%02d", hours,minutes,seconds)
-            state = true
-
-            //find which difficulty is selected
-            var diff = 0
-            if easy_clicked == true{
-                diff = 0
-            } else if medium_clicked == true{
-                diff = 1
-            } else if hard_clicked == true{
-                diff = 2
-            }
-            
-            //send time through BLE
-            let svc = tabBarController as! TabBarController
-            svc.sendKey = 1
-            svc.timerString = getTimeString(timeHour: hours, timeMin: minutes, timeSec: seconds) + String(diff)
-                //String(Int(intensity_slider.value))
-            currCentral?.connect(currPeripheral, options: nil)
-            //svc.sendKey = 0
-            //svc.timerSend = false
-
-            timer = Timer.scheduledTimer(timeInterval: 0.01, target: self, selector: #selector(clock), userInfo: nil, repeats: true)
+        if (currPeripheral == nil || currPeripheral.state != .connected) {
+            showToast(message: "Connect to a PAQ device to make changes")
         }
-        //When cancel button is pressed, show everything except the time ring circle, time label, and cancel button
-        else {
-            timer.invalidate()
-            time = time_picker.countDownDuration
-            time_picker.isHidden = false
-            timepickerview.isHidden = false
-            difficultyview.isHidden = false
-            //length_slider.isHidden = false
-            //length_lbl.isHidden = false
-            //intensity_lbl.isHidden = false
-            //intensity_slider.isHidden = false
-            progress_ring.isHidden = true
-            interact_lbl.isHidden = false
-            easy_button.isHidden = false
-            medium_button.isHidden = false
-            hard_button.isHidden = false
-            //inten_lbl.isHidden = false
-            //len_lbl.isHidden = false
-            time_lbl.isHidden = true
-            start_b.setTitle("Start", for: .normal)
-            state = false
-            
-            //send cancel message through BLE
-            let svc = tabBarController as! TabBarController
-            svc.sendKey = 1
-            svc.timerString = "C"
-            currCentral?.connect(currPeripheral, options: nil)
+        else{
+            if state == false {
+                time = time_picker.countDownDuration
+                time_picker.isHidden = true
+                timepickerview.isHidden = true
+                difficultyview.isHidden = true
+                //length_slider.isHidden = true
+                //length_lbl.isHidden = true
+                intensity_lbl.isHidden = true
+                intensity_slider.isHidden = true
+                progress_ring.isHidden = false
+                interact_lbl.isHidden = true
+                easy_button.isHidden = true
+                medium_button.isHidden = true
+                hard_button.isHidden = true
+                //inten_lbl.isHidden = true
+                //len_lbl.isHidden = true
+                time_lbl.isHidden = false
+                start_b.setTitle("Cancel", for: .normal)
+                
+                progress_ring.maxValue = CGFloat(time)
+                print(progress_ring.maxValue)
+                progress_ring.minValue = 0.0
+                progress_ring.value = CGFloat(time)
+                
+                hours = (Int(time)) / 3600
+                temp = (Int(time)) % 3600
+                minutes = temp / 60
+                temp = temp % 60
+                seconds = temp
+                progress_ring.shouldShowValueText = false
+                time_lbl.text = String(format: "%02d:%02d:%02d", hours,minutes,seconds)
+                state = true
+                
+                //find which difficulty is selected
+                var diff = 0
+                if easy_clicked == true{
+                    diff = 0
+                } else if medium_clicked == true{
+                    diff = 1
+                } else if hard_clicked == true{
+                    diff = 2
+                }
+                
+                //send time through BLE
+                let svc = tabBarController as! TabBarController
+                svc.sendKey = 1
+                svc.timerString = getTimeString(timeHour: hours, timeMin: minutes, timeSec: seconds) + String(diff)
+                //String(Int(intensity_slider.value))
+                currCentral?.connect(currPeripheral, options: nil)
+                //svc.sendKey = 0
+                //svc.timerSend = false
+                
+                timer = Timer.scheduledTimer(timeInterval: 0.01, target: self, selector: #selector(clock), userInfo: nil, repeats: true)
+            }
+                //When cancel button is pressed, show everything except the time ring circle, time label, and cancel button
+            else {
+                timer.invalidate()
+                time = time_picker.countDownDuration
+                time_picker.isHidden = false
+                timepickerview.isHidden = false
+                difficultyview.isHidden = false
+                //length_slider.isHidden = false
+                //length_lbl.isHidden = false
+                //intensity_lbl.isHidden = false
+                //intensity_slider.isHidden = false
+                progress_ring.isHidden = true
+                interact_lbl.isHidden = false
+                easy_button.isHidden = false
+                medium_button.isHidden = false
+                hard_button.isHidden = false
+                //inten_lbl.isHidden = false
+                //len_lbl.isHidden = false
+                time_lbl.isHidden = true
+                start_b.setTitle("Start", for: .normal)
+                state = false
+                
+                //send cancel message through BLE
+                let svc = tabBarController as! TabBarController
+                svc.sendKey = 1
+                svc.timerString = "C"
+                currCentral?.connect(currPeripheral, options: nil)
+            }
         }
     }
     
@@ -295,6 +291,28 @@ class TimerViewController: UIViewController {
         
         return today_string
         
+    }
+    
+    /*
+     * Send toast message as notification
+     */
+    func showToast(message : String) {
+        
+        let toastLabel = UILabel(frame: CGRect(x: self.view.frame.size.width/16, y: self.view.frame.size.height-100, width: self.view.frame.size.width*7/8, height: 35))
+        toastLabel.backgroundColor = UIColor.black.withAlphaComponent(0.6)
+        toastLabel.textColor = UIColor.white
+        toastLabel.textAlignment = .center;
+        toastLabel.font = UIFont(name: "Montserrat-Light", size: 12.0)
+        toastLabel.text = message
+        toastLabel.alpha = 1.0
+        toastLabel.layer.cornerRadius = 10;
+        toastLabel.clipsToBounds  =  true
+        self.view.addSubview(toastLabel)
+        UIView.animate(withDuration: 4.0, delay: 0.1, options: .curveEaseOut, animations: {
+            toastLabel.alpha = 0.0
+        }, completion: {(isCompleted) in
+            toastLabel.removeFromSuperview()
+        })
     }
 
     /*

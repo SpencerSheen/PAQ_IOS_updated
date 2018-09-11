@@ -10,6 +10,8 @@
 		13256581203537AC001617A6 /* PAQTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13256580203537AC001617A6 /* PAQTests.swift */; };
 		3D30493A8E4DF8609E71019D /* Pods_PAQ.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 577A5B211B16F0F206ADF549 /* Pods_PAQ.framework */; settings = {ATTRIBUTES = (Required, ); }; };
 		65B926A37096F7BAB8566922 /* Pods_PAQTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C41DCA3986B3DC4E1707FE76 /* Pods_PAQTests.framework */; };
+		881E47442147369C00481544 /* Montserrat-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = 881E47422147369A00481544 /* Montserrat-Bold.otf */; };
+		881E47452147369C00481544 /* Montserrat-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = 881E47432147369B00481544 /* Montserrat-Regular.otf */; };
 		882B7B772101482E0096FA05 /* instagram.png in Resources */ = {isa = PBXBuildFile; fileRef = 882B7B752101482D0096FA05 /* instagram.png */; };
 		882B7B782101482E0096FA05 /* facebook.png in Resources */ = {isa = PBXBuildFile; fileRef = 882B7B762101482E0096FA05 /* facebook.png */; };
 		882B7B7A2107B59E0096FA05 /* random-gif-1.gif in Resources */ = {isa = PBXBuildFile; fileRef = 882B7B792107B59E0096FA05 /* random-gif-1.gif */; };
@@ -67,6 +69,8 @@
 		22321E5E669A3090BFF3181D /* Pods-PAQ.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PAQ.debug.xcconfig"; path = "Pods/Target Support Files/Pods-PAQ/Pods-PAQ.debug.xcconfig"; sourceTree = "<group>"; };
 		577A5B211B16F0F206ADF549 /* Pods_PAQ.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_PAQ.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		64F22DF6EEE3D4DE640F3804 /* Pods-PAQ.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PAQ.release.xcconfig"; path = "Pods/Target Support Files/Pods-PAQ/Pods-PAQ.release.xcconfig"; sourceTree = "<group>"; };
+		881E47422147369A00481544 /* Montserrat-Bold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Montserrat-Bold.otf"; sourceTree = "<group>"; };
+		881E47432147369B00481544 /* Montserrat-Regular.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Montserrat-Regular.otf"; sourceTree = "<group>"; };
 		882B7B752101482D0096FA05 /* instagram.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = instagram.png; sourceTree = "<group>"; };
 		882B7B762101482E0096FA05 /* facebook.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = facebook.png; sourceTree = "<group>"; };
 		882B7B792107B59E0096FA05 /* random-gif-1.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = "random-gif-1.gif"; sourceTree = "<group>"; };
@@ -145,6 +149,15 @@
 			path = PAQTests;
 			sourceTree = "<group>";
 		};
+		881E4741214735CF00481544 /* Fonts */ = {
+			isa = PBXGroup;
+			children = (
+				881E47422147369A00481544 /* Montserrat-Bold.otf */,
+				881E47432147369B00481544 /* Montserrat-Regular.otf */,
+			);
+			path = Fonts;
+			sourceTree = "<group>";
+		};
 		886D163B2030F6DD00BAEB17 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -181,6 +194,7 @@
 		9E3782D8202ABC4200A07B86 /* PAQ */ = {
 			isa = PBXGroup;
 			children = (
+				881E4741214735CF00481544 /* Fonts */,
 				882B7B792107B59E0096FA05 /* random-gif-1.gif */,
 				882B7B762101482E0096FA05 /* facebook.png */,
 				882B7B752101482D0096FA05 /* instagram.png */,
@@ -336,6 +350,7 @@
 				887604D020B76E9600F604B0 /* main.png in Resources */,
 				9E3782E4202ABC4200A07B86 /* LaunchScreen.storyboard in Resources */,
 				9E6AE8302069196400D862E5 /* more yellow.png in Resources */,
+				881E47452147369C00481544 /* Montserrat-Regular.otf in Resources */,
 				9E6AE82E206913D400D862E5 /* stopwatch yellow.png in Resources */,
 				887604CC20B76E9600F604B0 /* ht_interact.jpg in Resources */,
 				887604CD20B76E9600F604B0 /* ht_time_day.jpg in Resources */,
@@ -354,6 +369,7 @@
 				882B7B782101482E0096FA05 /* facebook.png in Resources */,
 				9E6AE82C2069121F00D862E5 /* timer yellow.png in Resources */,
 				9E3782DF202ABC4200A07B86 /* Main.storyboard in Resources */,
+				881E47442147369C00481544 /* Montserrat-Bold.otf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
