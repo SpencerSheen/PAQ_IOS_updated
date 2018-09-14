@@ -15,6 +15,7 @@ class Home: UIViewController{
 
     @IBOutlet weak var bar: UINavigationBar!
     @IBOutlet weak var tableFormat: UITableView!
+    @IBOutlet weak var paqLabel: UILabel!
     
     //contains data from all alarms
     var alarms: [NSManagedObject] = []
@@ -41,7 +42,7 @@ class Home: UIViewController{
         /*let delegate = UIApplication.shared.delegate as! AppDelegate
          let context = delegate.persistentContainer.viewContext
          
-         let deleteFetch = NSFetchRequest<NSFetchRequestResult>(entityName: "BLE")
+         let deleteFetch = NSFetchRequest<NSFetchRequestResult>(entityName: "Feedback")
          let deleteRequest = NSBatchDeleteRequest(fetchRequest: deleteFetch)
          
          do {
@@ -50,6 +51,27 @@ class Home: UIViewController{
          } catch {
          print ("There was an error")
          }*/
+        guard let appDelegate =
+            UIApplication.shared.delegate as? AppDelegate else {
+                return
+        }
+        let managedContext = appDelegate.persistentContainer.viewContext
+        let request = NSFetchRequest<NSFetchRequestResult>(entityName: "Tracking")
+        do{
+            let trackEdit = try managedContext.fetch(request)
+            
+            //setting up edited contents
+            let toggle = trackEdit[0] as! NSManagedObject
+            toggle.setValue(toggle.value(forKeyPath:"alarmtab") as! Int + 1, forKeyPath: "alarmtab")
+            do {
+                //saves changes to coredata
+                try managedContext.save()
+            } catch {
+                print("Could not save")
+            }
+        } catch {
+            print("Could not fetch")
+        }
         
         tableView.allowsSelectionDuringEditing = true
         if(currPeripheral == nil){
@@ -73,9 +95,13 @@ class Home: UIViewController{
         
         //currCentral?.connect(currPeripheral, options: nil)
         
+        //let bounds = bar.bounds
+        //bar.frame = CGRect(x: 0, y: 0, width: bounds.width, height: bounds.height*1.5)
+        
         let tabBar = self.tabBarController?.tabBar
         tabBar?.selectionIndicatorImage = UIImage().createSelectionIndicator(color: UIColor(red: (252/255), green: 220/255, blue: 61/255, alpha: 1), size: CGSize(width: (tabBar?.frame.width)!/CGFloat((tabBar?.items!.count)!), height: (tabBar?.frame.height)!), lineWidth: 2.0)
         self.view.bringSubview(toFront: bar)
+        self.view.bringSubview(toFront: paqLabel)
         self.view.sendSubview(toBack: tableFormat)
         print(currPeripheral)
     }
@@ -97,6 +123,17 @@ class Home: UIViewController{
             svc.currCentral = currCentral
         }
         if segue.identifier == "addSegue"{
+            let alarmController = segue.destination as! ViewController
+            alarmController.currCentral = currCentral
+            alarmController.currPeripheral = currPeripheral
+            
+            //let svc = tabBarController as! TabBarController
+            svc.alarmIndex = -1
+            svc.sendKey = 3
+            svc.currPeripheral = currPeripheral
+            svc.currCentral = currCentral
+        }
+        if segue.identifier == "addSegue2"{
             let alarmController = segue.destination as! ViewController
             alarmController.currCentral = currCentral
             alarmController.currPeripheral = currPeripheral
@@ -131,7 +168,7 @@ class Home: UIViewController{
             else{
                 isConnected = true
             }
-            if (ident == "editSegue" || ident == "addSegue") {
+            if (ident == "editSegue" || ident == "addSegue" || ident == "addSegue2") {
                 //svc.sendKey = 3
                 return isConnected
             }
@@ -255,7 +292,7 @@ extension Home: UITableViewDataSource, UITableViewDelegate {
         print(currPeripheral)
         if (currPeripheral != nil && (currPeripheral.state == .connected /*|| currPeripheral.state == .connecting*/)) {
             
-            let delete = UIContextualAction(style: .destructive, title: "Delete", handler: { (
+            let delete = UIContextualAction(style: .destructive, title: "delete", handler: { (
                 action, sourceView, completionHandler) in
                 guard let appDelegate =
                     UIApplication.shared.delegate as? AppDelegate else {
@@ -282,7 +319,28 @@ extension Home: UITableViewDataSource, UITableViewDelegate {
                 tableView.reloadData()
                 
                 completionHandler(true)
+                
+                let request = NSFetchRequest<NSFetchRequestResult>(entityName: "Tracking")
+                do{
+                    let trackEdit = try managedContext.fetch(request)
+                    
+                    //setting up edited contents
+                    let toggle = trackEdit[0] as! NSManagedObject
+                    toggle.setValue(toggle.value(forKeyPath:"alarmdeleted") as! Int + 1, forKeyPath: "alarmdeleted")
+                    do {
+                        //saves changes to coredata
+                        try managedContext.save()
+                    } catch {
+                        print("Could not save")
+                    }
+                } catch {
+                    print("Could not fetch")
+                }
             })
+            
+            //delete.image = UIImage(named: "deletepic")
+            
+            
             let swipeAction = UISwipeActionsConfiguration(actions: [delete])
             swipeAction.performsFirstActionWithFullSwipe = false
             return swipeAction

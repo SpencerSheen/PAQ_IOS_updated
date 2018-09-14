@@ -51,7 +51,7 @@ class TableViewCell: UITableViewCell {
             }
             
             let managedContext = appDelegate.persistentContainer.viewContext
-            let request = NSFetchRequest<NSFetchRequestResult>(entityName: "AlarmList")
+            var request = NSFetchRequest<NSFetchRequestResult>(entityName: "AlarmList")
             do{
                 let editedAlarm = try managedContext.fetch(request)
                 let newAlarm = editedAlarm[index] as! NSManagedObject
@@ -74,6 +74,23 @@ class TableViewCell: UITableViewCell {
             } catch {
                 print("Could not fetch")
             }
+            
+            request = NSFetchRequest<NSFetchRequestResult>(entityName: "Tracking")
+            do{
+                let trackEdit = try managedContext.fetch(request)
+                
+                //setting up edited contents
+                let toggle = trackEdit[0] as! NSManagedObject
+                toggle.setValue(toggle.value(forKeyPath:"alarmtoggled") as! Int + 1, forKeyPath: "alarmtoggled")
+                do {
+                    //saves changes to coredata
+                    try managedContext.save()
+                } catch {
+                    print("Could not save")
+                }
+            } catch {
+                print("Could not fetch")
+            }
         }
         
     }
@@ -82,7 +99,7 @@ class TableViewCell: UITableViewCell {
      * Set alarm string that will be displayed to user
      */
     func setAlarmLabel(alarm: NSManagedObject){
-        time_lbl.text = alarm.value(forKeyPath: "time") as? String
+        time_lbl.text = (alarm.value(forKeyPath: "time") as? String)?.lowercased()
     }
     
     /*
@@ -109,25 +126,32 @@ class TableViewCell: UITableViewCell {
         let days: [Bool] = alarm.value(forKeyPath: "days") as? Array<Bool> ?? []
         var totalText = ""
         if(days[0]){
-            totalText += "M "
+            totalText += "mon, "
         }
         if(days[1]){
-            totalText += "T "
+            totalText += "tue, "
         }
         if(days[2]){
-            totalText += "W "
+            totalText += "wed, "
         }
         if(days[3]){
-            totalText += "Th "
+            totalText += "thu, "
         }
         if(days[4]){
-            totalText += "F "
+            totalText += "fri, "
         }
         if(days[5]){
-            totalText += "Sa "
+            totalText += "sat, "
         }
         if(days[6]){
-            totalText += "Su "
+            totalText += "sun, "
+        }
+        if totalText.count == 0{
+            totalText = "alarm"
+        }
+        else{
+            totalText = String(totalText.dropLast())
+            totalText = String(totalText.dropLast())
         }
         day_lbl.text = totalText;
     }

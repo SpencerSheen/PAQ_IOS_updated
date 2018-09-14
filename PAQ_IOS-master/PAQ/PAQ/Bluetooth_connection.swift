@@ -90,10 +90,10 @@ class Bluetooth_connection: UIViewController,UITableViewDelegate {
         let ID = extractID(id: String(alarms.value(forKeyPath: "id") as! Int))
         let time = extractTime(time: String(alarms.value(forKeyPath: "time") as! String))
         let days = extractDays(days: alarms.value(forKeyPath: "days") as? Array<Bool> ?? [])
+        //not being used
         let duration = extractDuration(value: String((alarms).value(forKeyPath: "duration") as! Int))
         
-        let misc = String((alarms).value(forKeyPath: "snoozes") as! Int) +
-            duration + String((alarms).value(forKeyPath: "interactivity") as! Int)
+        let misc = String((alarms).value(forKeyPath: "snoozes") as! Int) + String((alarms).value(forKeyPath: "interactivity") as! Int)
         
         
         let active = extractActive(active: alarms.value(forKeyPath: "active") as! Bool)

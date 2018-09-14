@@ -12,6 +12,10 @@
 		65B926A37096F7BAB8566922 /* Pods_PAQTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C41DCA3986B3DC4E1707FE76 /* Pods_PAQTests.framework */; };
 		881E47442147369C00481544 /* Montserrat-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = 881E47422147369A00481544 /* Montserrat-Bold.otf */; };
 		881E47452147369C00481544 /* Montserrat-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = 881E47432147369B00481544 /* Montserrat-Regular.otf */; };
+		881E47492149B09300481544 /* FeedbackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 881E47482149B09300481544 /* FeedbackView.swift */; };
+		881E474B2149BFEC00481544 /* DataView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 881E474A2149BFEC00481544 /* DataView.swift */; };
+		881E474D214B0F8800481544 /* deletepic.png in Resources */ = {isa = PBXBuildFile; fileRef = 881E474C214B0F8500481544 /* deletepic.png */; };
+		881E474F214B1E6C00481544 /* paqdevice.png in Resources */ = {isa = PBXBuildFile; fileRef = 881E474E214B1E6B00481544 /* paqdevice.png */; };
 		882B7B772101482E0096FA05 /* instagram.png in Resources */ = {isa = PBXBuildFile; fileRef = 882B7B752101482D0096FA05 /* instagram.png */; };
 		882B7B782101482E0096FA05 /* facebook.png in Resources */ = {isa = PBXBuildFile; fileRef = 882B7B762101482E0096FA05 /* facebook.png */; };
 		882B7B7A2107B59E0096FA05 /* random-gif-1.gif in Resources */ = {isa = PBXBuildFile; fileRef = 882B7B792107B59E0096FA05 /* random-gif-1.gif */; };
@@ -71,6 +75,10 @@
 		64F22DF6EEE3D4DE640F3804 /* Pods-PAQ.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PAQ.release.xcconfig"; path = "Pods/Target Support Files/Pods-PAQ/Pods-PAQ.release.xcconfig"; sourceTree = "<group>"; };
 		881E47422147369A00481544 /* Montserrat-Bold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Montserrat-Bold.otf"; sourceTree = "<group>"; };
 		881E47432147369B00481544 /* Montserrat-Regular.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Montserrat-Regular.otf"; sourceTree = "<group>"; };
+		881E47482149B09300481544 /* FeedbackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedbackView.swift; sourceTree = "<group>"; };
+		881E474A2149BFEC00481544 /* DataView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataView.swift; sourceTree = "<group>"; };
+		881E474C214B0F8500481544 /* deletepic.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = deletepic.png; sourceTree = "<group>"; };
+		881E474E214B1E6B00481544 /* paqdevice.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = paqdevice.png; sourceTree = "<group>"; };
 		882B7B752101482D0096FA05 /* instagram.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = instagram.png; sourceTree = "<group>"; };
 		882B7B762101482E0096FA05 /* facebook.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = facebook.png; sourceTree = "<group>"; };
 		882B7B792107B59E0096FA05 /* random-gif-1.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = "random-gif-1.gif"; sourceTree = "<group>"; };
@@ -208,7 +216,9 @@
 				9E69D44220438EFF009B96B9 /* BLE_signals.swift */,
 				9E3782ED202AE3AF00A07B86 /* Home.swift */,
 				9E3782EB202AE1FF00A07B86 /* TableViewCell.swift */,
+				881E474E214B1E6B00481544 /* paqdevice.png */,
 				9E6AE81B2068FB1700D862E5 /* logo.png */,
+				881E474C214B0F8500481544 /* deletepic.png */,
 				887604C220B76E9200F604B0 /* alarm.png */,
 				887604C820B76E9500F604B0 /* ht_add_alarm.jpg */,
 				887604C920B76E9500F604B0 /* ht_connect.png */,
@@ -231,6 +241,8 @@
 				887604D320B7749E00F604B0 /* HowTo.swift */,
 				882B7B7B2107B7270096FA05 /* LaunchScreen.swift */,
 				882B7B7D2122309D0096FA05 /* Settings.swift */,
+				881E47482149B09300481544 /* FeedbackView.swift */,
+				881E474A2149BFEC00481544 /* DataView.swift */,
 			);
 			path = PAQ;
 			sourceTree = "<group>";
@@ -354,6 +366,7 @@
 				9E6AE82E206913D400D862E5 /* stopwatch yellow.png in Resources */,
 				887604CC20B76E9600F604B0 /* ht_interact.jpg in Resources */,
 				887604CD20B76E9600F604B0 /* ht_time_day.jpg in Resources */,
+				881E474D214B0F8800481544 /* deletepic.png in Resources */,
 				887604CE20B76E9600F604B0 /* timer.png in Resources */,
 				887604CA20B76E9600F604B0 /* ht_snooze.jpg in Resources */,
 				887604D120B76E9600F604B0 /* ht_add_alarm.jpg in Resources */,
@@ -365,6 +378,7 @@
 				9E6AE81C2068FB1700D862E5 /* logo.png in Resources */,
 				9E07B29C20780CFF00F98370 /* logo final-10 (1).png in Resources */,
 				9E3782E1202ABC4200A07B86 /* Assets.xcassets in Resources */,
+				881E474F214B1E6C00481544 /* paqdevice.png in Resources */,
 				887604CF20B76E9600F604B0 /* ht_more_tab.jpg in Resources */,
 				882B7B782101482E0096FA05 /* facebook.png in Resources */,
 				9E6AE82C2069121F00D862E5 /* timer yellow.png in Resources */,
@@ -458,8 +472,10 @@
 				9E9D7FD32044CE1B0001C342 /* Bluetooth_connection.swift in Sources */,
 				9E3782EE202AE3AF00A07B86 /* Home.swift in Sources */,
 				886D16402030F7FD00BAEB17 /* PAQ.xcdatamodeld in Sources */,
+				881E47492149B09300481544 /* FeedbackView.swift in Sources */,
 				9E3782DA202ABC4200A07B86 /* AppDelegate.swift in Sources */,
 				888F224420A6515D006ADAAC /* Popup.swift in Sources */,
+				881E474B2149BFEC00481544 /* DataView.swift in Sources */,
 				9E421352204E04C100DF6611 /* Stopwatch.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

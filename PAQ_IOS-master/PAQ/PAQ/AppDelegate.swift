@@ -87,6 +87,27 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func applicationDidBecomeActive(_ application: UIApplication) {
         // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
+        guard let appDelegate =
+            UIApplication.shared.delegate as? AppDelegate else {
+                return
+        }
+        let managedContext = appDelegate.persistentContainer.viewContext
+        let request = NSFetchRequest<NSFetchRequestResult>(entityName: "Tracking")
+        do{
+            let trackEdit = try managedContext.fetch(request)
+            
+            //setting up edited contents
+            let toggle = trackEdit[0] as! NSManagedObject
+            toggle.setValue(toggle.value(forKeyPath:"applaunches") as! Int + 1, forKeyPath: "applaunches")
+            do {
+                //saves changes to coredata
+                try managedContext.save()
+            } catch {
+                print("Could not save")
+            }
+        } catch {
+            print("Could not fetch")
+        }
     }
 
     

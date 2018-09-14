@@ -12,6 +12,7 @@ import CoreBluetooth
 
 class ViewController: UIViewController {
 
+    @IBOutlet weak var titleLabel: UINavigationItem!
     @IBOutlet weak var duration_slider: UISlider!
     @IBOutlet weak var duration_lbl: UILabel!
     @IBOutlet weak var snoozes_num: UISlider!
@@ -137,7 +138,7 @@ class ViewController: UIViewController {
     }
     
     @IBOutlet weak var snoozeToggleVar: UISwitch!
-    var snoozeOn = 0
+    var snoozeOn = 1
     
     /*
      * Track snooze toggle on
@@ -157,10 +158,10 @@ class ViewController: UIViewController {
     @IBOutlet weak var medium_button: UIButton!
     @IBOutlet weak var easy_button: UIButton!
     
-    var easy_clicked = true
+    var easy_clicked = false
     var medium_clicked = false
     var hard_clicked = false
-    var diffValue = 0
+    var diffValue = 3
     
     /*
      * When easy button is clicked, set easy button to yellow and set rest of buttons to dark grey.
@@ -174,6 +175,11 @@ class ViewController: UIViewController {
             medium_clicked = false
             hard_clicked = false
             diffValue = 0
+        }
+        else{
+            easy_button.borderColor = UIColor(red: 77/255, green: 77/255, blue: 77/255, alpha: 1)
+            easy_clicked = false
+            diffValue = 3
         }
     }
     
@@ -190,6 +196,11 @@ class ViewController: UIViewController {
             hard_clicked = false
             diffValue = 1
         }
+        else{
+            medium_button.borderColor = UIColor(red: 77/255, green: 77/255, blue: 77/255, alpha: 1)
+            medium_clicked = false
+            diffValue = 3
+        }
     }
     
     /*
@@ -204,6 +215,11 @@ class ViewController: UIViewController {
             medium_clicked = false
             hard_clicked = true
             diffValue = 2
+        }
+        else{
+            hard_button.borderColor = UIColor(red: 77/255, green: 77/255, blue: 77/255, alpha: 1)
+            hard_clicked = false
+            diffValue = 3
         }
     }
 
@@ -242,7 +258,7 @@ class ViewController: UIViewController {
             let entity = NSEntityDescription.entity(forEntityName: "AlarmList", in: managedContext)
             //RUNS WHEN EDITING ALARM
             if(edit){
-                let request = NSFetchRequest<NSFetchRequestResult>(entityName: "AlarmList")
+                var request = NSFetchRequest<NSFetchRequestResult>(entityName: "AlarmList")
                 do{
                     let editedAlarm = try managedContext.fetch(request)
                     print("Edited length: " + String(editedAlarm.count))
@@ -252,10 +268,27 @@ class ViewController: UIViewController {
                     newAlarm.setValue(repeat_days, forKeyPath: "days")
                     newAlarm.setValue(snoozeOn, forKeyPath: "snoozes")
                     newAlarm.setValue(diffValue, forKeyPath: "interactivity")
-                    newAlarm.setValue(Int(duration_slider.value), forKeyPath: "duration")
+                    //newAlarm.setValue(Int(duration_slider.value), forKeyPath: "duration")
                     do {
                         //send new data through bluetooth
                         currCentral?.connect(currPeripheral, options: nil)
+                        //saves changes to coredata
+                        try managedContext.save()
+                    } catch {
+                        print("Could not save")
+                    }
+                } catch {
+                    print("Could not fetch")
+                }
+                
+                request = NSFetchRequest<NSFetchRequestResult>(entityName: "Tracking")
+                do{
+                    let trackEdit = try managedContext.fetch(request)
+                    
+                    //setting up edited contents
+                    let toggle = trackEdit[0] as! NSManagedObject
+                    toggle.setValue(toggle.value(forKeyPath:"alarmedited") as! Int + 1, forKeyPath: "alarmedited")
+                    do {
                         //saves changes to coredata
                         try managedContext.save()
                     } catch {
@@ -273,7 +306,7 @@ class ViewController: UIViewController {
                 alarm.setValue(repeat_days, forKeyPath: "days")
                 alarm.setValue(snoozeOn, forKeyPath: "snoozes")
                 alarm.setValue(diffValue, forKeyPath: "interactivity")
-                alarm.setValue(Int(duration_slider.value), forKeyPath: "duration")
+                //alarm.setValue(Int(duration_slider.value), forKeyPath: "duration")
                 
                 alarm.setValue(true, forKeyPath: "active")
                 var randomNum = Int(arc4random_uniform(1000))
@@ -292,6 +325,23 @@ class ViewController: UIViewController {
                     print("Alarm length: " + String(alarms.count))
                 } catch let error as NSError {
                     print("Could not save. \(error), \(error.userInfo)")
+                }
+                
+                let request = NSFetchRequest<NSFetchRequestResult>(entityName: "Tracking")
+                do{
+                    let trackEdit = try managedContext.fetch(request)
+                    
+                    //setting up edited contents
+                    let toggle = trackEdit[0] as! NSManagedObject
+                    toggle.setValue(toggle.value(forKeyPath:"alarmcreated") as! Int + 1, forKeyPath: "alarmcreated")
+                    do {
+                        //saves changes to coredata
+                        try managedContext.save()
+                    } catch {
+                        print("Could not save")
+                    }
+                } catch {
+                    print("Could not fetch")
                 }
             }
         }
@@ -374,7 +424,7 @@ class ViewController: UIViewController {
         
         //if editing the alarm, retrieve data and change sliders/time to corresponding data
         if edit == true{
-            
+            titleLabel.title = "edit"
             //svc.alarmIndex = index
             //svc.sendKey = 3
             //setKeyValues(3)
@@ -393,9 +443,9 @@ class ViewController: UIViewController {
                 let oldAlarm = editedAlarm[index] as! NSManagedObject
                 
                 //INTENSITY, DURATION, AND SNOOZES NOT CURRENTLY BEING USED
-                intensity_slider.value = Float(oldAlarm.value(forKeyPath: "interactivity") as! Int)
-                duration_slider.value = Float(oldAlarm.value(forKeyPath: "duration") as! Int)
-                snoozes_num.value = Float(oldAlarm.value(forKeyPath: "snoozes") as! Int)
+                //intensity_slider.value = Float(oldAlarm.value(forKeyPath: "interactivity") as! Int)
+                //duration_slider.value = Float(oldAlarm.value(forKeyPath: "duration") as! Int)
+                //snoozes_num.value = Float(oldAlarm.value(forKeyPath: "snoozes") as! Int)
                 
                 //retrieve old difficulty value
                 let oldDiff = Float(oldAlarm.value(forKeyPath: "interactivity") as! Int)
@@ -417,7 +467,7 @@ class ViewController: UIViewController {
                     hard_clicked = false
                     diffValue = 1
                 }
-                else{
+                else if oldDiff == 2{
                     hard_button.borderColor = UIColor(red: (252/255), green: 220/255, blue: 61/255, alpha: 1)
                     medium_button.borderColor = UIColor(red: 77/255, green: 77/255, blue: 77/255, alpha: 1)
                     easy_button.borderColor = UIColor(red: 77/255, green: 77/255, blue: 77/255, alpha: 1)
@@ -425,6 +475,15 @@ class ViewController: UIViewController {
                     medium_clicked = false
                     hard_clicked = true
                     diffValue = 2
+                }
+                else{
+                    hard_button.borderColor = UIColor(red: 77/255, green: 77/255, blue: 77/255, alpha: 1)
+                    medium_button.borderColor = UIColor(red: 77/255, green: 77/255, blue: 77/255, alpha: 1)
+                    easy_button.borderColor = UIColor(red: 77/255, green: 77/255, blue: 77/255, alpha: 1)
+                    easy_clicked = false
+                    medium_clicked = false
+                    hard_clicked = false
+                    diffValue = 3
                 }
                 
                 //retreive old snooze value
@@ -519,9 +578,9 @@ class ViewController: UIViewController {
         }
         
         //setting all labels to default/retrived alarm values
-        intensity_lbl.text = "Easy"
-        snoozes_num_lbl.text = String(Int(snoozes_num.value))
-        duration_lbl.text = String(Int(duration_slider.value))
+        //intensity_lbl.text = "Easy"
+        //snoozes_num_lbl.text = String(Int(snoozes_num.value))
+        //duration_lbl.text = String(Int(duration_slider.value))
         
         //adjusting date picker to phone time
         time_picker.timeZone = TimeZone.current

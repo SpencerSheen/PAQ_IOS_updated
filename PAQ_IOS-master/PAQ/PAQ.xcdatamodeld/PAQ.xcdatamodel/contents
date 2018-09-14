@@ -15,8 +15,27 @@
         <attribute name="peripheral" optional="YES" attributeType="Transformable" syncable="YES"/>
         <attribute name="peripheralID" optional="YES" attributeType="UUID" usesScalarValueType="NO" syncable="YES"/>
     </entity>
+    <entity name="Feedback" representedClassName="Feedback" syncable="YES" codeGenerationType="class">
+        <attribute name="entry" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="time" optional="YES" attributeType="String" syncable="YES"/>
+    </entity>
+    <entity name="Tracking" representedClassName="Tracking" syncable="YES" codeGenerationType="class">
+        <attribute name="alarmcreated" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="alarmdeleted" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="alarmedited" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="alarmtab" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="alarmtoggled" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="applaunches" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="batterychecked" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="devicetab" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="timercancelled" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="timerstarted" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="timertab" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+    </entity>
     <elements>
         <element name="AlarmList" positionX="-63" positionY="27" width="128" height="150"/>
         <element name="BLE" positionX="-63" positionY="90" width="128" height="105"/>
+        <element name="Feedback" positionX="-63" positionY="90" width="128" height="75"/>
+        <element name="Tracking" positionX="-54" positionY="99" width="128" height="210"/>
     </elements>
 </model>

@@ -8,6 +8,7 @@
 import UIKit
 import UICircularProgressRing
 import CoreBluetooth
+import CoreData
 
 class TimerViewController: UIViewController {
     var currCentral: CBCentralManager?
@@ -41,7 +42,7 @@ class TimerViewController: UIViewController {
 
     var state = false
     
-    var easy_clicked = true
+    var easy_clicked = false
     var medium_clicked = false
     var hard_clicked = false
     /*
@@ -55,6 +56,10 @@ class TimerViewController: UIViewController {
             easy_clicked = true
             medium_clicked = false
             hard_clicked = false
+        }
+        else{
+            easy_button.borderColor = UIColor(red: 77/255, green: 77/255, blue: 77/255, alpha: 1)
+            easy_clicked = false
         }
     }
     
@@ -70,6 +75,10 @@ class TimerViewController: UIViewController {
             easy_clicked = false
             hard_clicked = false
         }
+        else{
+            medium_button.borderColor = UIColor(red: 77/255, green: 77/255, blue: 77/255, alpha: 1)
+            medium_clicked = false
+        }
     }
     
     /*
@@ -84,6 +93,10 @@ class TimerViewController: UIViewController {
             medium_clicked = false
             hard_clicked = true
         }
+        else{
+            hard_button.borderColor = UIColor(red: 77/255, green: 77/255, blue: 77/255, alpha: 1)
+            hard_clicked = false
+        }
     }
     
     /*
@@ -97,6 +110,29 @@ class TimerViewController: UIViewController {
         }
         else{
             if state == false {
+                
+                guard let appDelegate =
+                    UIApplication.shared.delegate as? AppDelegate else {
+                        return
+                }
+                let managedContext = appDelegate.persistentContainer.viewContext
+                let request = NSFetchRequest<NSFetchRequestResult>(entityName: "Tracking")
+                do{
+                    let trackEdit = try managedContext.fetch(request)
+                    
+                    //setting up edited contents
+                    let toggle = trackEdit[0] as! NSManagedObject
+                    toggle.setValue(toggle.value(forKeyPath:"timerstarted") as! Int + 1, forKeyPath: "timerstarted")
+                    do {
+                        //saves changes to coredata
+                        try managedContext.save()
+                    } catch {
+                        print("Could not save")
+                    }
+                } catch {
+                    print("Could not fetch")
+                }
+                
                 time = time_picker.countDownDuration
                 time_picker.isHidden = true
                 timepickerview.isHidden = true
@@ -137,7 +173,10 @@ class TimerViewController: UIViewController {
                     diff = 1
                 } else if hard_clicked == true{
                     diff = 2
+                } else{
+                    diff = 3
                 }
+                
                 
                 //send time through BLE
                 let svc = tabBarController as! TabBarController
@@ -152,6 +191,29 @@ class TimerViewController: UIViewController {
             }
                 //When cancel button is pressed, show everything except the time ring circle, time label, and cancel button
             else {
+                
+                guard let appDelegate =
+                    UIApplication.shared.delegate as? AppDelegate else {
+                        return
+                }
+                let managedContext = appDelegate.persistentContainer.viewContext
+                let request = NSFetchRequest<NSFetchRequestResult>(entityName: "Tracking")
+                do{
+                    let trackEdit = try managedContext.fetch(request)
+                    
+                    //setting up edited contents
+                    let toggle = trackEdit[0] as! NSManagedObject
+                    toggle.setValue(toggle.value(forKeyPath:"timercancelled") as! Int + 1, forKeyPath: "timercancelled")
+                    do {
+                        //saves changes to coredata
+                        try managedContext.save()
+                    } catch {
+                        print("Could not save")
+                    }
+                } catch {
+                    print("Could not fetch")
+                }
+                
                 timer.invalidate()
                 time = time_picker.countDownDuration
                 time_picker.isHidden = false
@@ -219,6 +281,29 @@ class TimerViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        guard let appDelegate =
+            UIApplication.shared.delegate as? AppDelegate else {
+                return
+        }
+        let managedContext = appDelegate.persistentContainer.viewContext
+        let request = NSFetchRequest<NSFetchRequestResult>(entityName: "Tracking")
+        do{
+            let trackEdit = try managedContext.fetch(request)
+            
+            //setting up edited contents
+            let toggle = trackEdit[0] as! NSManagedObject
+            toggle.setValue(toggle.value(forKeyPath:"timertab") as! Int + 1, forKeyPath: "timertab")
+            do {
+                //saves changes to coredata
+                try managedContext.save()
+            } catch {
+                print("Could not save")
+            }
+        } catch {
+            print("Could not fetch")
+        }
+        
         time_picker.setValue(UIColor.white, forKey: "textColor")
         time_picker.timeZone = TimeZone.current
         progress_ring.isHidden = true

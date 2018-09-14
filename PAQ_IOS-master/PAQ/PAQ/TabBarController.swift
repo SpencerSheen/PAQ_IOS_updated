@@ -15,6 +15,7 @@ class TabBarController: UITabBarController{
     var currPeripheral: CBPeripheral!
     var CBUUIDList: [NSUUID] = []
     var peripherals:[CBPeripheral] = []
+    var trackArray:[NSManagedObject] = []
     
     //Key: 0 for sending nothing
     //Key: 1 for timer
@@ -48,6 +49,8 @@ class TabBarController: UITabBarController{
          } catch {
          print ("There was an error")
          }*/
+        
+        setUpTracking()
         
         //if central and peripheral values already exist, save them into coredata
         if(currCentral != nil && currPeripheral != nil){
@@ -121,6 +124,42 @@ class TabBarController: UITabBarController{
         
     }
     
+    func setUpTracking(){
+        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else {
+            return
+        }
+        let context = appDelegate.persistentContainer.viewContext
+        let request = NSFetchRequest<NSFetchRequestResult>(entityName: "Tracking")
+        let entity = NSEntityDescription.entity(forEntityName: "Tracking", in: context)
+        do{
+            let trackArray = try context.fetch(request)
+            if(trackArray.count == 0){
+                let newPeripheral = NSManagedObject(entity: entity!, insertInto: context)
+                newPeripheral.setValue(0, forKey: "alarmdeleted")
+                newPeripheral.setValue(0, forKey: "alarmedited")
+                newPeripheral.setValue(0, forKey: "timerstarted")
+                newPeripheral.setValue(0, forKey: "alarmtab")
+                newPeripheral.setValue(0, forKey: "alarmtoggled")
+                newPeripheral.setValue(0, forKey: "applaunches")
+                newPeripheral.setValue(0, forKey: "batterychecked")
+                newPeripheral.setValue(0, forKey: "devicetab")
+                newPeripheral.setValue(0, forKey: "timercancelled")
+                newPeripheral.setValue(0, forKey: "alarmcreated")
+                newPeripheral.setValue(0, forKey: "timertab")
+            }
+            else{
+                return
+            }
+        } catch {
+            print("Could not fetch")
+        }
+        do {
+            //saves changes to coredata
+            try context.save()
+        } catch {
+            print("Could not save")
+        }
+    }
     
     //takes every alarm from coredata and converts it to a string
     func getAlarm(alarms: NSManagedObject) -> String{
@@ -128,10 +167,10 @@ class TabBarController: UITabBarController{
         let ID = extractID(id: String((alarms).value(forKeyPath: "id") as! Int))
         let time = extractTime(time: String((alarms).value(forKeyPath: "time") as! String))
         let days = extractDays(days: (alarms).value(forKeyPath: "days") as? Array<Bool> ?? [])
+        //not being used
         let duration = extractDuration(value: String((alarms).value(forKeyPath: "duration") as! Int))
         
-        let misc = String((alarms).value(forKeyPath: "snoozes") as! Int) +
-            duration + String((alarms).value(forKeyPath: "interactivity") as! Int)
+        let misc = String((alarms).value(forKeyPath: "snoozes") as! Int) + String((alarms).value(forKeyPath: "interactivity") as! Int)
         
         let active = extractActive(active: alarms.value(forKeyPath: "active") as! Bool)
         //order of alarm string

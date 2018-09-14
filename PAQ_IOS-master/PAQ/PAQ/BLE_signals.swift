@@ -8,6 +8,7 @@
 
 import UIKit
 import CoreBluetooth
+import CoreData
 
 class BLE_signals: UIViewController{
     let random_string = "xferfervs"
@@ -15,6 +16,8 @@ class BLE_signals: UIViewController{
     var peripheralManager: CBPeripheralManager?
     @IBOutlet weak var connectButton: UIButton!
 
+    @IBOutlet weak var more: UIBarButtonItem!
+    @IBOutlet weak var moreButton: UIButton!
     
     @IBAction func connect_btn(_ sender: Any) {
         //centralManager = CBCentralManager(delegate: self, queue: nil)
@@ -28,6 +31,34 @@ class BLE_signals: UIViewController{
     
     }
     
+    @IBAction func batteryClick(_ sender: Any) {
+        let svc = tabBarController as! TabBarController
+        svc.sendKey = 1
+        svc.timerString = "B"
+        svc.currCentral?.connect(svc.currPeripheral, options: nil)
+        
+        guard let appDelegate =
+            UIApplication.shared.delegate as? AppDelegate else {
+                return
+        }
+        let managedContext = appDelegate.persistentContainer.viewContext
+        let request = NSFetchRequest<NSFetchRequestResult>(entityName: "Tracking")
+        do{
+            let trackEdit = try managedContext.fetch(request)
+            
+            //setting up edited contents
+            let toggle = trackEdit[0] as! NSManagedObject
+            toggle.setValue(toggle.value(forKeyPath:"batterychecked") as! Int + 1, forKeyPath: "batterychecked")
+            do {
+                //saves changes to coredata
+                try managedContext.save()
+            } catch {
+                print("Could not save")
+            }
+        } catch {
+            print("Could not fetch")
+        }
+    }
     /*
      * FACEBOOK AND INSTAGRAM FUNCTIONS NOT BEING USED HERE, SEE Settings.swift
      */
@@ -62,6 +93,29 @@ class BLE_signals: UIViewController{
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        moreButton.isHidden = true
+        guard let appDelegate =
+            UIApplication.shared.delegate as? AppDelegate else {
+                return
+        }
+        let managedContext = appDelegate.persistentContainer.viewContext
+        let request = NSFetchRequest<NSFetchRequestResult>(entityName: "Tracking")
+        do{
+            let trackEdit = try managedContext.fetch(request)
+            
+            //setting up edited contents
+            let toggle = trackEdit[0] as! NSManagedObject
+            toggle.setValue(toggle.value(forKeyPath:"devicetab") as! Int + 1, forKeyPath: "devicetab")
+            do {
+                //saves changes to coredata
+                try managedContext.save()
+            } catch {
+                print("Could not save")
+            }
+        } catch {
+            print("Could not fetch")
+        }
+        
         let goldBorder = UIColor(red: (252/255), green: 220/255, blue: 61/255, alpha: 1)
         //connectButton.layer.borderColor = goldBorder.cgColor
         
